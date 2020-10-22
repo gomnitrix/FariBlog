@@ -63,9 +63,9 @@ public class MpGenerator {
         pc.setEntity("entity");
         pc.setController("controller");
         pc.setMapper("mapper");
-        pc.setService("service");
+        pc.setService("com.gomnitrix.farigateway.service");
         // 默认在service路径下的impl下，设个设置则可以指定其他路径
-        //pc.setServiceImpl("service.impl");
+        //pc.setServiceImpl("com.gomnitrix.farigateway.service.impl");
         // 默认在mapper路径下的xml，这个设置则可以指定其他路径
         //pc.setXml("mapper.xml");
         generator.setPackageInfo(pc);
