@@ -1,10 +1,8 @@
 package com.gomnitrix.commons.jwt;
 
+import com.gomnitrix.commons.exception.InvalidJwtException;
 import com.gomnitrix.commons.utils.Base64Util;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.JwtBuilder;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.crypto.spec.SecretKeySpec;
@@ -76,11 +74,18 @@ public class JwtUtil {
      * @return
      */
     private static Claims parseJWT(String jwt) {
-        return Jwts.parserBuilder()
+        Claims claims;
+        try{
+            claims = Jwts.parserBuilder()
                             .setSigningKey(secretKey)
                             .build()
                             .parseClaimsJws(jwt)
                             .getBody();
+        }catch (JwtException e){
+            //TODO log
+            throw new InvalidJwtException();
+        }
+        return claims;
     }
 
     /**
@@ -124,7 +129,7 @@ public class JwtUtil {
      *
      * @return
      */
-    public static boolean checkToken(String jwt) throws Exception {
+    public static boolean checkToken(String jwt) {
         Claims claims = JwtUtil.parseJWT(jwt);
         return isExpiration(claims);
     }

@@ -2,9 +2,11 @@ package com.gomnitrix.commons.Response;
 
 import com.gomnitrix.commons.utils.JsonUtil;
 import lombok.Data;
+import org.springframework.util.ObjectUtils;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 @Data
 public abstract class Response {
@@ -17,13 +19,26 @@ public abstract class Response {
         Map<String, Object> data = new HashMap<>();
         Integer code;
 
-        public T putData(String key, Object value){
+        /**
+         * add a pair of key-value to the data
+         * @param key
+         * @param value
+         * @return
+         */
+        public T addItem(String key, Object value){
             data.put(key, value);
             return self();
         }
 
-        public T setData(Map<String, Object> newData){
-            this.data.putAll(newData);
+        /**
+         * add multiple new data to the data
+         * @param newData
+         * @return
+         */
+        public T addItems(Map<String, Object> newData){
+            if(!ObjectUtils.isEmpty(newData)){
+                this.data.putAll(newData);
+            }
             return self();
         }
 
