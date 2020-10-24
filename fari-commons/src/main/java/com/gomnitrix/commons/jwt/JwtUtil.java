@@ -1,5 +1,6 @@
 package com.gomnitrix.commons.jwt;
 
+import com.gomnitrix.commons.entity.JwtInfo;
 import com.gomnitrix.commons.exception.InvalidJwtException;
 import com.gomnitrix.commons.utils.Base64Util;
 import io.jsonwebtoken.*;
@@ -16,7 +17,7 @@ import java.util.Map;
 import java.util.Properties;
 
 @Slf4j
-public class JwtUtil {
+public abstract class JwtUtil {
     private static Key secretKey;
     private static String issuer;
     private static Integer expiresSecond;
@@ -90,25 +91,25 @@ public class JwtUtil {
 
     /**
      * get UserName from jwt
-     * @param jwt
+     * @param jwtClaims
      * @return
      */
-    public static String getUserName(String jwt){
-        return parseJWT(jwt).getSubject();
+    public static String getUserName(Claims jwtClaims){
+        return jwtClaims.getSubject();
     }
 
     /**
      * get plain userId from jwt
-     * @param jwt
+     * @param jwtClaims
      * @return
      */
-    public static String getUserId(String jwt){
-        String cipherUserId = parseJWT(jwt).get("uid", String.class);
+    public static String getUserId(Claims jwtClaims){
+        String cipherUserId = jwtClaims.get("uid", String.class);
         return Base64Util.base64Decode(cipherUserId);
     }
 
-    public static String getAudience(String jwt){
-        return parseJWT(jwt).getAudience();
+    public static String getAudience(Claims jwtClaims){
+        return jwtClaims.getAudience();
     }
 
     /**
@@ -132,5 +133,10 @@ public class JwtUtil {
     public static boolean checkToken(String jwt) {
         Claims claims = JwtUtil.parseJWT(jwt);
         return isExpiration(claims);
+    }
+
+    public static JwtInfo getInfoFromToken(String jwt){
+        Claims claims = JwtUtil.parseJWT(jwt);
+        return new JwtInfo(JwtUtil.getUserName(claims), JwtUtil.getUserId(claims), "");
     }
 }

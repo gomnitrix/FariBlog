@@ -58,8 +58,11 @@ public abstract class Response {
         builder.data.clear();
     }
 
-
-    public String getResponse(){
+    /**
+     * turn this response object to JSON format.
+     * @return
+     */
+    public String toJson(){
         return JsonUtil.respToJson(this);
     }
 }
