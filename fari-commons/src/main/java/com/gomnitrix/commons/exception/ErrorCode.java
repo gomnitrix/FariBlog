@@ -2,10 +2,15 @@ package com.gomnitrix.commons.exception;
 
 /**
  * manage all Exception code
+ * AUTH FAILED -> 1XXX
+ * RESOURCE  NOT FOUND -> 2XXX
+ * OTHER ERROR -> 5XXX
  */
 public enum ErrorCode {
     JWT_VERIFICATION_FAILED(1001, "Invalid Or Expired Token."),
+    USER_NOT_FOUND(2001, "No Such User Exist"),
     INTERNAL_ERROR(5001, "Some Internal Errors happened");
+
 
     private final Integer code;
     private final String message;
