@@ -14,15 +14,15 @@ class JwtUtilTest {
 //    void createJWT() {
 //    }
 
-    @Test
-    void getUserName() {
-        Assert.assertEquals(userName, JwtUtil.getUserName(testJwt));
-    }
-
-    @Test
-    void getUserId() {
-        Assert.assertEquals(userId, JwtUtil.getUserId(testJwt));
-    }
+//    @Test
+//    void getUserName() {
+//        Assert.assertEquals(userName, JwtUtil.getUserName(testJwt));
+//    }
+//
+//    @Test
+//    void getUserId() {
+//        Assert.assertEquals(userId, JwtUtil.getUserId(testJwt));
+//    }
 
     @Test
     void isExpiration() {

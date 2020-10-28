@@ -14,7 +14,12 @@
     <description>Web module of fariblog.</description>
 
     <dependencies>
-
+        <!--FariBlog Modules-->
+        <dependency>
+            <groupId>com.gomnitrix</groupId>
+            <artifactId>fari-commons</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 
 </project>

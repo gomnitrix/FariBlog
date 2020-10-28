@@ -12,7 +12,15 @@ public class Base64Util {
         return encoder.encodeToString(textBytes);
     }
 
+    public static byte[] base64EncodeToBytes(byte[] plainText){
+        return encoder.encode(plainText);
+    }
+
     public static String base64Decode(String cipherText){
         return new String(decoder.decode(cipherText));
+    }
+
+    public static byte[] base64DecodeToBytes(byte[] cipherText){
+        return decoder.decode(cipherText);
     }
 }
