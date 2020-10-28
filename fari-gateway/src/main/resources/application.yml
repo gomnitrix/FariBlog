@@ -1,0 +1,5 @@
+server:
+  port: 8501
+
+client:
+  client-id: FARI_GATEWAY

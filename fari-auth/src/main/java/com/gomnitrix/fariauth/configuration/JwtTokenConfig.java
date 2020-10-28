@@ -1,5 +1,6 @@
 package com.gomnitrix.fariauth.configuration;
 
+import com.gomnitrix.commons.utils.RsaKeyPairUtil;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.oauth2.provider.token.TokenStore;
@@ -17,8 +18,7 @@ public class JwtTokenConfig {
     public JwtAccessTokenConverter jwtAccessTokenConverter(){
         JwtAccessTokenConverter accessTokenConverter = new JwtAccessTokenConverter();
         //TODO secret key
-
-        accessTokenConverter.setSigningKey("dev");
+        accessTokenConverter.setKeyPair(RsaKeyPairUtil.getKeyPair());
         return accessTokenConverter;
     }
 

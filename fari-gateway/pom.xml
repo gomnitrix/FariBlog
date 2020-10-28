@@ -8,15 +8,14 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>fari-auth</artifactId>
-    <name>fari-auth</name>
-    <description>Authentication and authorization service department of fariblog system.</description>
+    <artifactId>fari-gateway</artifactId>
+    <name>fari-gateway</name>
+    <description>The gateway of the fariblog system.</description>
 
     <dependencies>
         <dependency>
-            <groupId>com.gomnitrix</groupId>
-            <artifactId>fari-commons</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-gateway</artifactId>
         </dependency>
     </dependencies>
 

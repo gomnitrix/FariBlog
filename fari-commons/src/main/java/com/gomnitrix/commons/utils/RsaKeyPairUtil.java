@@ -17,11 +17,11 @@ public abstract class RsaKeyPairUtil {
             rsaKeyFactory = KeyFactory.getInstance(GeneralConfig.RSA);
 
             // check if rsa key exist, if not, then create it.
-//            File pubKeyFile = new File(GeneralConfig.PUB_FILE);
-//            File priKeyFile = new File(GeneralConfig.PRI_FILE);
-//            if (!pubKeyFile.exists() || !priKeyFile.exists()) {
-//                generateAndSaveKeyPair();
-//            }
+            File pubKeyFile = new File(GeneralConfig.PUB_FILE);
+            File priKeyFile = new File(GeneralConfig.PRI_FILE);
+            if (!pubKeyFile.exists() || !priKeyFile.exists()) {
+                generateAndSaveKeyPair();
+            }
         } catch (NoSuchAlgorithmException e) {
             throw new RsaKeyException();
         }

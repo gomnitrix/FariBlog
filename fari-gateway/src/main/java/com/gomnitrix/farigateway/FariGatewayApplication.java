@@ -1,4 +1,4 @@
-package com.gomnitrix.fariauth;
+package com.gomnitrix.farigateway;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -6,10 +6,10 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 
 @SpringBootApplication
 @EnableDiscoveryClient
-public class FariAuthApplication {
+public class FariGatewayApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(FariAuthApplication.class, args);
+        SpringApplication.run(FariGatewayApplication.class, args);
     }
 
 }
