@@ -10,7 +10,7 @@
 
     <artifactId>fari-auth</artifactId>
     <name>fari-auth</name>
-    <description>Authentication and authorization service department of fariblog system.</description>
+    <description>Authentication and authorization com.gomnitrix.farigateway.service department of fariblog system.</description>
 
     <dependencies>
         <dependency>

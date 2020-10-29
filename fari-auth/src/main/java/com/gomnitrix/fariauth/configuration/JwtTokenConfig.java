@@ -7,6 +7,8 @@ import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 
+import java.security.KeyPair;
+
 @Configuration
 public class JwtTokenConfig {
     @Bean
@@ -18,8 +20,13 @@ public class JwtTokenConfig {
     public JwtAccessTokenConverter jwtAccessTokenConverter(){
         JwtAccessTokenConverter accessTokenConverter = new JwtAccessTokenConverter();
         //TODO secret key
-        accessTokenConverter.setKeyPair(RsaKeyPairUtil.getKeyPair());
+        accessTokenConverter.setKeyPair(rsaKeyPair());
         return accessTokenConverter;
+    }
+
+    @Bean
+    public KeyPair rsaKeyPair(){
+        return RsaKeyPairUtil.getKeyPair();
     }
 
 //    public static class JwtTokenEnhancer implements TokenEnhancer{

@@ -19,7 +19,6 @@ import javax.sql.DataSource;
 @Configuration
 @EnableAuthorizationServer
 public class OAuth2ServerConfig extends AuthorizationServerConfigurerAdapter {
-    private static final String DEMO_RESOURCE_ID = "order";
 
     @Autowired
     private DataSource dataSource;
