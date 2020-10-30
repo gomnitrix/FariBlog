@@ -13,4 +13,11 @@ spring:
       discovery:
         locator:
           enabled: true
+          lower-case-service-id: true
       routes:
+      - id: fariAuthRouter
+        uri: lb://fari-auth
+        predicates:
+          - Path=/fariblog/oauth/authorize/**
+        filters:
+          - StripPrefix=1

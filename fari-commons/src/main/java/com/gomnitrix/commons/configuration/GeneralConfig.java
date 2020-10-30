@@ -1,7 +1,5 @@
 package com.gomnitrix.commons.configuration;
 
-import org.bouncycastle.jcajce.provider.asymmetric.RSA;
-
 public abstract class GeneralConfig {
     // resource path
     public static final String RAW_RESOURCE_PATH = GeneralConfig.class.getResource("").toString();
@@ -12,4 +10,8 @@ public abstract class GeneralConfig {
     public static final int KEY_SIZE = 1024;
     public static final String PUB_FILE = RESOURCE_PATH+"public.pem";
     public static final String PRI_FILE = RESOURCE_PATH+"private.pem";
+
+    //server name
+    public static final String FARI_AUTH = "fari-auth";
+    public static final String FARI_GATEWAY = "fari-gateway";
 }

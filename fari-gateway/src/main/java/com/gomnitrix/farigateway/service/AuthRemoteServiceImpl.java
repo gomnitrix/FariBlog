@@ -1,7 +1,7 @@
 package com.gomnitrix.farigateway.service;
 
 import com.gomnitrix.commons.Response.Response;
-import com.gomnitrix.commons.configuration.AuthServerRespKey;
+import com.gomnitrix.commons.configuration.AuthServerConstConfig;
 import com.gomnitrix.commons.utils.JsonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.openfeign.EnableFeignClients;
@@ -15,9 +15,10 @@ public class AuthRemoteServiceImpl {
     @Autowired
     private AuthRemoteService authRemoteService;
 
-    public RSAPublicKey getPublicKey(){
+    public String getPublicKey() {
         String rawResp = authRemoteService.getPublicKey();
         Response response = JsonUtil.jsonToObject(rawResp, Response.class);
-        return (RSAPublicKey) response.getData().get(AuthServerRespKey.PUBLIC_KEY);
+        RSAPublicKey key = (RSAPublicKey) response.getData().get(AuthServerConstConfig.PUBLIC_KEY);
+        return new String(key.getEncoded());
     }
 }

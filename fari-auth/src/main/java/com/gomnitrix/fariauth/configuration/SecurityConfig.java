@@ -1,5 +1,6 @@
 package com.gomnitrix.fariauth.configuration;
 
+import com.gomnitrix.commons.configuration.AuthServerConstConfig;
 import com.gomnitrix.commons.service.BlogUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -44,7 +45,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .antMatchers("/oauth/*").permitAll()
-                .antMatchers("/rsa/publicKey").permitAll()
+                .antMatchers(AuthServerConstConfig.PUB_KEY_PATH).permitAll()
                 .anyRequest().authenticated();
     }
 }

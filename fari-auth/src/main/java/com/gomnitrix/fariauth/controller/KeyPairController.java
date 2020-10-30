@@ -1,7 +1,7 @@
 package com.gomnitrix.fariauth.controller;
 
 import com.gomnitrix.commons.Response.SuccessResponse;
-import com.gomnitrix.commons.configuration.AuthServerRespKey;
+import com.gomnitrix.commons.configuration.AuthServerConstConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,7 +21,7 @@ public class KeyPairController {
     public String getPublicKey() {
         RSAPublicKey publicKey = (RSAPublicKey) oauth2RsaKeyPair.getPublic();
         return respBuilder
-                .addItem(AuthServerRespKey.PUBLIC_KEY, publicKey)
+                .addItem(AuthServerConstConfig.PUBLIC_KEY, publicKey)
                 .build()
                 .toJson();
     }

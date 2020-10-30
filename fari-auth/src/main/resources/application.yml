@@ -1,9 +1,6 @@
 server:
   port: 6001
 
-client:
-  client-id: FARI_GATEWAY
-
 spring:
   application:
     name: fari-auth

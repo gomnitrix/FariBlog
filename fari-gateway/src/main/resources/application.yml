@@ -2,4 +2,6 @@ server:
   port: 8501
 
 client:
-  client-id: FARI_GATEWAY
+  id: fari-gateway
+  secret: fari-gateway-20201030
+  redirect-uri: http://localhost:8501/fariblog/login
