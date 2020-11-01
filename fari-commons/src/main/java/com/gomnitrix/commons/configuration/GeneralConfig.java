@@ -14,4 +14,7 @@ public abstract class GeneralConfig {
     //server name
     public static final String FARI_AUTH = "fari-auth";
     public static final String FARI_GATEWAY = "fari-gateway";
+
+    //server URL
+    public static final String AUTH_SERVER_URL = GatewayConstConfig.HTTP_PREFIX + "/" + FARI_AUTH;
 }

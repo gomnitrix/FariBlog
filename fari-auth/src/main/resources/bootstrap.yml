@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: fari-auth
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 81.71.139.43:8848
+        username: nacos
+        password: 199810172015EZIO
+  datasource:
+    druid:
+      url: jdbc:mysql://81.71.139.43:3306/fariblog
+      username: omnitrix
+      password: 981017

@@ -34,7 +34,7 @@ public class OAuth2ServerConfig extends AuthorizationServerConfigurerAdapter {
     private TokenStore jwtTokenStore;
 
     @Autowired
-    private TokenEnhancer jwtTokenEnhancer;
+    private JwtTokenConfig.JwtTokenEnhancer jwtTokenEnhancer;
 
     @Autowired
     private PasswordEncoder passwordEncoder;

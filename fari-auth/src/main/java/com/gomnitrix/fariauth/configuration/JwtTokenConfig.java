@@ -12,6 +12,7 @@ import org.springframework.security.oauth2.provider.token.TokenEnhancer;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
+import org.springframework.stereotype.Component;
 
 import java.security.KeyPair;
 import java.util.HashMap;
@@ -27,13 +28,12 @@ public class JwtTokenConfig {
     @Bean
     public JwtAccessTokenConverter jwtAccessTokenConverter() {
         JwtAccessTokenConverter accessTokenConverter = new JwtAccessTokenConverter();
-        //TODO secret key
         accessTokenConverter.setKeyPair(rsaKeyPair());
         return accessTokenConverter;
     }
 
     @Bean
-    public TokenEnhancer tokenEnhancer(){
+    public TokenEnhancer tokenEnhancer() {
         return new JwtTokenEnhancer();
     }
 
@@ -42,11 +42,12 @@ public class JwtTokenConfig {
         return RsaKeyPairUtil.getKeyPair();
     }
 
+    @Component
     public static class JwtTokenEnhancer implements TokenEnhancer {
         @Override
         public OAuth2AccessToken enhance(OAuth2AccessToken oAuth2AccessToken, OAuth2Authentication oAuth2Authentication) {
             Object principal = oAuth2Authentication.getPrincipal();
-            if(principal instanceof User){
+            if (principal instanceof User) {
                 User user = (User) principal;
                 Map<String, Object> extraInfo = new HashMap<>();
                 extraInfo.put(AuthServerConstConfig.USER_ID, user.getUid());

@@ -1,5 +1,6 @@
 package com.gomnitrix.commons.entity;
 
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import java.time.LocalDate;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -26,6 +27,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
+@TableName("t_user")
 public class User extends Model<User> implements UserDetails {
 
     private static final long serialVersionUID = 1L;

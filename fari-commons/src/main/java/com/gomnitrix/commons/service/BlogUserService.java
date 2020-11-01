@@ -20,7 +20,7 @@ public class BlogUserService implements UserDetailsService {
         QueryWrapper<User> wrapper = new QueryWrapper<>();
         wrapper.eq("user_name", s);
         User user = userMapper.selectOne(wrapper);
-        if(user == null){
+        if (user == null) {
             throw new UserNotFoundException();
         }
         return user;

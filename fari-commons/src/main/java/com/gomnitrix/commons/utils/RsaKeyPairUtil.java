@@ -5,6 +5,9 @@ import com.gomnitrix.commons.exception.RsaKeyException;
 
 import java.io.File;
 import java.security.*;
+import java.security.spec.PKCS8EncodedKeySpec;
+import java.security.spec.RSAPrivateCrtKeySpec;
+import java.security.spec.RSAPrivateKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Objects;
 
@@ -53,7 +56,7 @@ public abstract class RsaKeyPairUtil {
     public static PrivateKey getPrivateKeyFromResource() {
         try {
             byte[] privateKeyBytes = IOUtil.readFileToBytesWithBase64Decode(GeneralConfig.PRI_FILE);
-            return rsaKeyFactory.generatePrivate(getX509SpecFromKeyBytes(privateKeyBytes));
+            return rsaKeyFactory.generatePrivate(getPKCSpec(privateKeyBytes));
         } catch (Exception e) {
             throw new RsaKeyException();
         }
@@ -65,6 +68,10 @@ public abstract class RsaKeyPairUtil {
 
     private static X509EncodedKeySpec getX509SpecFromKeyBytes(byte[] keyBytes) {
         return new X509EncodedKeySpec(Objects.requireNonNull(keyBytes));
+    }
+
+    private static PKCS8EncodedKeySpec getPKCSpec(byte[] keyBytes){
+        return new PKCS8EncodedKeySpec(keyBytes);
     }
 
 

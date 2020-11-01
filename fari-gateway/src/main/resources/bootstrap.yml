@@ -1,23 +1,38 @@
+server:
+  port: 6002
+  error:
+    whitelabel:
+      enabled: false
 spring:
+  main:
+    allow-bean-definition-overriding: true
   application:
     name: fari-gateway
+  datasource:
+    druid:
+      url: jdbc:mysql://81.71.139.43:3306/fariblog
+      username: omnitrix
+      password: 981017
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: http://81.71.139.43:${server.port}/fari-auth/rsa/publicKey
   cloud:
     nacos:
       discovery:
-        server-addr: 127.0.0.1:8848
-      config:
-        group: ${gateway.dynamicRoute.group}
-        file-extension: json
-        server-addr: 127.0.0.1:8848
+        server-addr: 81.71.139.43:8848
+        username: nacos
+        password: 199810172015EZIO
     gateway:
       discovery:
         locator:
           enabled: true
           lower-case-service-id: true
       routes:
-      - id: fariAuthRouter
-        uri: lb://fari-auth
-        predicates:
-          - Path=/fariblog/oauth/authorize/**
-        filters:
-          - StripPrefix=1
+        - id: fariAuthRouter
+          uri: lb://fari-auth
+          predicates:
+            - Path=/fari-auth/**
+          filters:
+            - StripPrefix=1
