@@ -1,6 +1,7 @@
 package com.gomnitrix.farigateway.configuration;
 
 import com.gomnitrix.commons.configuration.GatewayConstConfig;
+import com.gomnitrix.commons.configuration.GeneralConfig;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -40,7 +41,7 @@ public class GatewaySecurityConfig {
 //        http.oauth2ResourceServer().jwt()
 //                .jwtDecoder(jwtDecoder());
         http.authorizeExchange()
-                .pathMatchers("/fari-auth/**").permitAll()
+                .pathMatchers(GeneralConfig.AUTH_SHORTR_PATH + "/**").permitAll()
                 .pathMatchers(GatewayConstConfig.REDIRECT_URI).permitAll()
                 .and().csrf().disable();
         return http.build();

@@ -33,6 +33,6 @@ spring:
         - id: fariAuthRouter
           uri: lb://fari-auth
           predicates:
-            - Path=/fari-auth/**
+            - Path=/fariAuth/**
           filters:
             - StripPrefix=1

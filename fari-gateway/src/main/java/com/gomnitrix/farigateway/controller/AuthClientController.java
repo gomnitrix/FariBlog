@@ -16,26 +16,26 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Map;
 
 @RestController
-@RequestMapping(value = GatewayConstConfig.FARI_BLOG)
+@RequestMapping(value = GeneralConfig.GATEWAY_SHORTR_PATH)
 public class AuthClientController {
     @Value("${security.oauth2.client.client-id}")
     private String clientId;
     @Value("${security.oauth2.client.client-secret}")
     private String secret;
 
-    @GetMapping(value = GatewayConstConfig.CODE_PATH)
+    @GetMapping(value = GeneralConfig.CODE_PATH)
     public String codeToToken(@RequestParam("code") String code) {
         OkHttpClient httpClient = new OkHttpClient();
         RequestBody body = new FormBody.Builder()
                 .add("grant_type", "authorization_code")
                 .add("client", clientId)
-                .add("redirect_uri", secret)
+                .add("redirect_uri", GatewayConstConfig.REDIRECT_URL)
                 .add("code", code)
                 .build();
         Request request = new Request.Builder()
                 .url(GeneralConfig.AUTH_SERVER_URL + AuthServerConstConfig.TOKEN_PATH)
                 .post(body)
-                .addHeader("Authorization", "Basic " + Base64Util.base64Encode(GatewayConstConfig.CLIENT_ID + ":" + GatewayConstConfig.CLIENT_SECRET))
+                .addHeader("Authorization", "Basic " + Base64Util.base64Encode(clientId + ":" + secret))
                 .build();
         try {
             Response response = httpClient.newCall(request).execute();
