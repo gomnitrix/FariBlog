@@ -18,7 +18,6 @@
 
     <modules>
         <module>fari-commons</module>
-        <module>fari-web</module>
         <module>fari-auth</module>
         <module>fari-gateway</module>
     </modules>

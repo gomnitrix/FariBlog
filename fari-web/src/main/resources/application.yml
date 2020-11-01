@@ -1,6 +1,0 @@
-security:
-oauth2:
-  client:
-    client-id: WEB_MODULE
-    client-secret: 123456
-    access-token-uri: http://localhost:6001/oauth/token
