@@ -44,7 +44,7 @@ export default {
   data () {
     return {
       showLoignBox: false,
-      imgSrc: require('@/assets/logo.png')
+      imgSrc: require('@/assets/FariBlog.jpg')
     }
   },
   methods: {
