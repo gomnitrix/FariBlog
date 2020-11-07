@@ -41,8 +41,12 @@ public class GatewaySecurityConfig {
 //        http.oauth2ResourceServer().jwt()
 //                .jwtDecoder(jwtDecoder());
         http.authorizeExchange()
+                //允许所有访问认证服务器的请求
                 .pathMatchers(GeneralConfig.AUTH_SHORTR_PATH + "/**").permitAll()
-                .pathMatchers(GatewayConstConfig.REDIRECT_URI).permitAll()
+                //允许访问登录接口的请求（不是认证服务器的登录接口，而是网关的登录接口）
+                .pathMatchers(GeneralConfig.FARI_LOGIN_URI).permitAll()
+                //允许访问网关中的code接口，用于认证服务器向网管传递认证码，可能会废弃
+                .pathMatchers(GeneralConfig.GATEWAY_REDIRECT_URI).permitAll()
                 .and().csrf().disable();
         return http.build();
     }

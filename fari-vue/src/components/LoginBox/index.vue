@@ -95,12 +95,12 @@ export default {
           var params = {}
           params.userName = this.loginForm.userName
           params.passWord = this.loginForm.passWord
-          params.isRememberMe = 1
+          // params.isRememberMe = 1
           login(params).then(response => {
             if (response.code === this.$ECode.SUCCESS) {
               console.log('success!: ')
               console.log(response.data)
-              location.replace(process.env.FARI_VUE_WEB + '/?userId=' + response.data)
+              location.replace(process.env.VUE_APP_WEB_API + '/?userId=' + response.data)
               window.location.reload()
             } else {
               this.$message({

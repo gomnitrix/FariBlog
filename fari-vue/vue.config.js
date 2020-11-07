@@ -47,7 +47,6 @@ module.exports = {
     //pwa: {}, // PWA 插件相关配置 see https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-pwa
     // webpack-dev-server 相关配置
     devServer: {
-        open: process.platform === 'darwin',
         host: '0.0.0.0', // 允许外部ip访问
         port: 8080, // 端口
         https: false, // 启用https
