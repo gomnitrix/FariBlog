@@ -56,6 +56,7 @@
 </template>
 
 <script>
+import { login } from '@/api/user'
 export default {
   name: 'Login',
   props: {
@@ -95,6 +96,19 @@ export default {
           params.userName = this.loginForm.userName
           params.passWord = this.loginForm.passWord
           params.isRememberMe = 1
+          login(params).then(response => {
+            if (response.code === this.$ECode.SUCCESS) {
+              console.log('success!: ')
+              console.log(response.data)
+              location.replace(process.env.FARI_VUE_WEB + '/?userId=' + response.data)
+              window.location.reload()
+            } else {
+              this.$message({
+                type: 'error',
+                message: response.data
+              })
+            }
+          })
         }
       }
       )
