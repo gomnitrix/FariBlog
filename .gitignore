@@ -38,3 +38,6 @@ CreateTable.sql
 
 *.yml
 *.properties
+
+*.jpg
+*.png

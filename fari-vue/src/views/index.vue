@@ -2,9 +2,8 @@
   <div id="idx">
     <div id="cover">
       <img
-        :src="imgSrc"
+        :src="fariImgSrc"
         width="100%"
-        height="100%"
         alt=""
       >
     </div>
@@ -44,7 +43,7 @@ export default {
   data () {
     return {
       showLoignBox: false,
-      imgSrc: require('@/assets/FariBlog.jpg')
+      fariImgSrc: require('@/assets/FariBlog.png')
     }
   },
   methods: {
@@ -56,6 +55,7 @@ export default {
 </script>
 
 <style scoped>
+
   #idx{
     width:100%;
     height:100%;
@@ -65,9 +65,7 @@ export default {
     justify-content: center;
   }
   #cover{
-    width:100%;
-    height:100%;  /**宽高100%是为了图片铺满屏幕 **/
-    z-index:-1;
+    z-index:0;
     position: absolute;
   }
   #btns{
