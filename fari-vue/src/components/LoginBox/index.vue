@@ -97,6 +97,9 @@ export default {
           params.passWord = this.loginForm.passWord
           // params.isRememberMe = 1
           login(params).then(response => {
+            console.log('hello there!')
+            console.log(this.$ECode.SUCCESS)
+            console.log('done')
             if (response.code === this.$ECode.SUCCESS) {
               console.log('success!: ')
               console.log(response.data)

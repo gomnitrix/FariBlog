@@ -1,7 +1,7 @@
 import { Message } from 'element-ui'
 const ECode = {
-  SUCCESS: '1',
-  ERROR: '0'
+  SUCCESS: 0,
+  ERROR: 1
 }
 
 const FUNCTIONS = {
