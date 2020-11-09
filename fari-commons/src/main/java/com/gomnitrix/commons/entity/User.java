@@ -10,9 +10,11 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import java.io.Serializable;
 import java.util.Collection;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -101,6 +103,8 @@ public class User extends Model<User> implements UserDetails {
     /**
      * 最后登录时间
      */
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @TableField("last_login_time")
     private LocalDateTime lastLoginTime;
 

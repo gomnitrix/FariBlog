@@ -1,15 +1,16 @@
 package com.gomnitrix.farigateway.controller;
 
+import com.gomnitrix.commons.Response.ErrorResponse;
 import com.gomnitrix.commons.Response.SuccessResponse;
 import com.gomnitrix.commons.configuration.GatewayConstConfig;
 import com.gomnitrix.commons.configuration.GeneralConfig;
+import com.gomnitrix.commons.exception.AuthenFailedException;
 import com.gomnitrix.commons.utils.Base64Util;
-import com.gomnitrix.commons.utils.JsonUtil;
 import com.gomnitrix.farigateway.utils.OkHttpUtil;
-import okhttp3.*;
-import okhttp3.RequestBody;
-import org.apache.http.impl.client.FutureRequestExecutionService;
-import org.bouncycastle.cert.ocsp.Req;
+import okhttp3.ConnectionPool;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
@@ -69,7 +70,8 @@ public class AuthClientController {
                     .toJson();
         } catch (Exception e) {
             e.printStackTrace();
+            //Todo 这里需要调整，下面那个return逻辑不对
         }
-        return null;
+        return new ErrorResponse.Builder(new AuthenFailedException()).build().toJson();
     }
 }

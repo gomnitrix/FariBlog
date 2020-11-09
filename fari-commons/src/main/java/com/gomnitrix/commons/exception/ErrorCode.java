@@ -10,11 +10,12 @@ public enum ErrorCode {
     JWT_VERIFICATION_FAILED(1001, "Invalid Or Expired Token."),
     USER_NOT_FOUND(2001, "No Such User Exist"),
     INTERNAL_ERROR(5001, "Some Internal Errors Happened"),
-    RSA_KEY_EXCEPTION(5002, "Some Error Occurs When Use Rsa Key Pairs");
+    RSA_KEY_EXCEPTION(5002, "Some Error Occurs When Use Rsa Key Pairs"),
+    AUTHENTICATION_FAILED(1002, "Username Or Password Wrong.");
 
 
     private final Integer code;
-    private final String message;
+    private String message;
 
     ErrorCode(int code, String message){
         this.code = code;
@@ -27,6 +28,10 @@ public enum ErrorCode {
 
     public String getMessage() {
         return message;
+    }
+
+    public void setMessage(String message){
+        this.message = message;
     }
 
     @Override

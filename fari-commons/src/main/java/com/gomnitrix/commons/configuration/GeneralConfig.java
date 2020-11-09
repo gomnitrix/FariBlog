@@ -27,6 +27,12 @@ public abstract class GeneralConfig {
     public static final String FARI_LOGIN_URI = FARI_BLOG_SHORTR_PATH + GatewayConstConfig.LOGIN_PATH;
     public static final String GATEWAY_REDIRECT_URI = GATEWAY_SHORTR_PATH + GatewayConstConfig.CODE_PATH;
 
+    // Ip related
+    public final static String OS = "OS";
+    public final static String BROWSER = "BROWSER";
+    public final static String IP = "ip";
+    public final static String UTF_8 = "utf-8";
+
     private static String getPath()
     {
         String path = GeneralConfig.class.getProtectionDomain().getCodeSource().getLocation().getPath();

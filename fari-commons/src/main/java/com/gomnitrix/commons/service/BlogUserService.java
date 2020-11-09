@@ -26,5 +26,8 @@ public class BlogUserService implements UserDetailsService {
         return user;
     }
 
-//    public List<User> getAllUsers(){};
+    public void updateLoginInfoById(User user){
+        userMapper.updateLoginInfo(user);
+    }
+
 }
