@@ -2,6 +2,7 @@
   <el-dialog
     :visible.sync="showLoignBox"
     :before-close="cancel"
+    :modal-append-to-body="false"
     title="Login"
     center
   >
@@ -97,12 +98,7 @@ export default {
           params.passWord = this.loginForm.passWord
           // params.isRememberMe = 1
           login(params).then(response => {
-            console.log('hello there!')
-            console.log(this.$ECode.SUCCESS)
-            console.log('done')
             if (response.code === this.$ECode.SUCCESS) {
-              console.log('success!: ')
-              console.log(response.data)
               location.replace(process.env.VUE_APP_WEB_API + '/?userId=' + response.data)
               window.location.reload()
             } else {
