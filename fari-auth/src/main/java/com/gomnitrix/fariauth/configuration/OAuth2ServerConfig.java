@@ -1,7 +1,9 @@
 package com.gomnitrix.fariauth.configuration;
 
-import com.gomnitrix.commons.service.BlogUserService;
+import com.gomnitrix.commons.Response.SuccessResponse;
+import com.gomnitrix.commons.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -43,7 +45,7 @@ public class OAuth2ServerConfig extends AuthorizationServerConfigurerAdapter {
     private JwtAccessTokenConverter jwtAccessTokenConverter;
 
     @Autowired
-    private BlogUserService blogUserService;
+    private UserServiceImpl userServiceImpl;
 
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
@@ -62,7 +64,7 @@ public class OAuth2ServerConfig extends AuthorizationServerConfigurerAdapter {
                 .tokenStore(jwtTokenStore)
                 .tokenEnhancer(enhancerChain)
                 .accessTokenConverter(jwtAccessTokenConverter)
-                .userDetailsService(blogUserService)
+                .userDetailsService(userServiceImpl)
                 .authenticationManager(authenticationManager);
     }
 

@@ -1,6 +1,7 @@
 package com.gomnitrix.commons.Response;
 
 import com.gomnitrix.commons.exception.BaseException;
+import org.springframework.stereotype.Component;
 
 public class ErrorResponse extends Response {
     private ErrorResponse(Builder builder, BaseException e) {
@@ -9,6 +10,7 @@ public class ErrorResponse extends Response {
         super.setMessage(e.getError().getMessage());
     }
 
+    @Component
     public static class Builder extends Response.Builder<Builder> {
         private final BaseException e;
 

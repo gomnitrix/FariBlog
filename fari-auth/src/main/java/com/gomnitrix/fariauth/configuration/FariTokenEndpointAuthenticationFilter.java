@@ -1,11 +1,10 @@
 package com.gomnitrix.fariauth.configuration;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gomnitrix.commons.Response.ErrorResponse;
 import com.gomnitrix.commons.configuration.GeneralConfig;
 import com.gomnitrix.commons.entity.User;
 import com.gomnitrix.commons.exception.AuthenFailedException;
-import com.gomnitrix.commons.service.BlogUserService;
+import com.gomnitrix.commons.service.UserServiceImpl;
 import com.gomnitrix.fariauth.utils.IpUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -25,7 +24,7 @@ import java.util.Map;
 @Configuration
 public class FariTokenEndpointAuthenticationFilter extends TokenEndpointAuthenticationFilter {
     @Autowired
-    BlogUserService service;
+    UserServiceImpl service;
 
     public FariTokenEndpointAuthenticationFilter(AuthenticationManager authenticationManager, OAuth2RequestFactory oAuth2RequestFactory) {
         super(authenticationManager, oAuth2RequestFactory);

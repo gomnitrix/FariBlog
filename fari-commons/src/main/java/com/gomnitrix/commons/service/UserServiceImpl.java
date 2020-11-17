@@ -1,6 +1,8 @@
 package com.gomnitrix.commons.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.gomnitrix.commons.dto.UserDto;
 import com.gomnitrix.commons.entity.User;
 import com.gomnitrix.commons.exception.UserNotFoundException;
 import com.gomnitrix.commons.mapper.UserMapper;
@@ -8,12 +10,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
-public class BlogUserService implements UserDetailsService {
+public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserDetailsService {
     @Autowired
     UserMapper userMapper;
+
+    @Autowired
+    PasswordEncoder encoder;
 
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
@@ -30,4 +36,11 @@ public class BlogUserService implements UserDetailsService {
         userMapper.updateLoginInfo(user);
     }
 
+    public void register(UserDto userDto){
+        User user = new User();
+        user.setEmail(userDto.getEmail());
+        user.setUserName(userDto.getUserName());
+        user.setPassWord(encoder.encode(userDto.getPassWord()));
+
+    }
 }
