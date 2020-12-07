@@ -13,6 +13,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+
 @Service
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserDetailsService {
     @Autowired
@@ -20,6 +22,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Autowired
     PasswordEncoder encoder;
+
+    @Autowired
+    UuidService uuidService;
 
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
@@ -41,6 +46,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         user.setEmail(userDto.getEmail());
         user.setUserName(userDto.getUserName());
         user.setPassWord(encoder.encode(userDto.getPassWord()));
-
+        user.setUuid(uuidService.getUid());
+        LocalDateTime current = LocalDateTime.now();
+        user.setCreateTime(current);
+        user.setUpdateTime(current);
+        userMapper.insert(user);
     }
 }

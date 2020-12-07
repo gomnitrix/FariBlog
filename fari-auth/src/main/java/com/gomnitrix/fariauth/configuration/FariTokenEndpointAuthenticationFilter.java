@@ -7,12 +7,12 @@ import com.gomnitrix.commons.exception.AuthenFailedException;
 import com.gomnitrix.commons.service.UserServiceImpl;
 import com.gomnitrix.fariauth.utils.IpUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.oauth2.provider.OAuth2RequestFactory;
 import org.springframework.security.oauth2.provider.endpoint.TokenEndpointAuthenticationFilter;
+import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -21,7 +21,7 @@ import java.io.PrintWriter;
 import java.time.LocalDateTime;
 import java.util.Map;
 
-@Configuration
+@Component
 public class FariTokenEndpointAuthenticationFilter extends TokenEndpointAuthenticationFilter {
     @Autowired
     UserServiceImpl service;

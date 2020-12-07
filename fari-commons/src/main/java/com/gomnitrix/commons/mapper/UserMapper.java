@@ -6,8 +6,6 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Update;
 import org.springframework.stereotype.Component;
 
-import java.util.Map;
-
 /**
  * <p>
  * 用户表 Mapper 接口
@@ -22,5 +20,4 @@ public interface UserMapper extends BaseMapper<User> {
 
     @Update("update t_user set browser = #{browser}, os = #{os}, last_login_ip = #{last_login_ip}, last_login_time = #{last_login_time}, login_count = login_count + 1} where uid = #{uid}")
     public void updateLoginInfo(User user);
-
 }
