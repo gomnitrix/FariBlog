@@ -11,7 +11,8 @@ public enum ErrorCode {
     USER_NOT_FOUND(2001, "No Such User Exist"),
     INTERNAL_ERROR(5001, "Some Internal Errors Happened"),
     RSA_KEY_EXCEPTION(5002, "Some Error Occurs When Use Rsa Key Pairs"),
-    AUTHENTICATION_FAILED(1002, "Username Or Password Wrong.");
+    AUTHENTICATION_FAILED(1002, "Username Or Password Wrong."),
+    INVALID_PARAMETER(5003, "Some Error Occurs While Parsing Parameter.");
 
 
     private final Integer code;

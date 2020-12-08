@@ -1,7 +1,5 @@
 package com.gomnitrix.commons.Response;
 
-import org.springframework.stereotype.Component;
-
 public class SuccessResponse extends Response {
     private SuccessResponse(Builder builder) {
         super(builder);
@@ -10,7 +8,6 @@ public class SuccessResponse extends Response {
         super.setMessage("success");
     }
 
-    @Component
     public static class Builder extends Response.Builder<SuccessResponse.Builder> {
         @Override
         public SuccessResponse build() {

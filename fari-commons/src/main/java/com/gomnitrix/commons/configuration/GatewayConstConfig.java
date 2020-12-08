@@ -7,6 +7,7 @@ public abstract class GatewayConstConfig {
     //API in Gateway
     public static final String CODE_PATH = "/code";
     public static final String LOGIN_PATH = "/login";
+    public static final String REGISTER_PATH = "/register";
 
     public static final String AUTHORITY_PREFIX = "ROLE_";
 

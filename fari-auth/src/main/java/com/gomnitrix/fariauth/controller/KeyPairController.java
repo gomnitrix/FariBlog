@@ -23,7 +23,7 @@ public class KeyPairController {
 
     private final SuccessResponse.Builder respBuilder = new SuccessResponse.Builder();
 
-    @GetMapping("/rsa/publicKey")
+    @GetMapping(AuthServerConstConfig.PUB_KEY_PATH)
     public Map<String, Object> getPublicKey() {
         RSAPublicKey publicKey = (RSAPublicKey) oauth2RsaKeyPair.getPublic();
         RSAKey key = new RSAKey.Builder(publicKey).build();

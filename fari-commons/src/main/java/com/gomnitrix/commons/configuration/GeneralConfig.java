@@ -18,7 +18,6 @@ public abstract class GeneralConfig {
 
     //short path
     public static final String FARI_BLOG_SHORTR_PATH = "/fariblog";
-
     public static final String AUTH_SHORTR_PATH = "/fariAuth";
     public static final String GATEWAY_SHORTR_PATH = "/fariGateway";
 
@@ -26,6 +25,7 @@ public abstract class GeneralConfig {
     public static final String AUTH_TOKEN_URI = AUTH_SHORTR_PATH + AuthServerConstConfig.TOKEN_PATH;
     public static final String FARI_LOGIN_URI = FARI_BLOG_SHORTR_PATH + GatewayConstConfig.LOGIN_PATH;
     public static final String GATEWAY_REDIRECT_URI = GATEWAY_SHORTR_PATH + GatewayConstConfig.CODE_PATH;
+    public static final String FARI_REGISTER_URI = FARI_BLOG_SHORTR_PATH + GatewayConstConfig.REGISTER_PATH;
 
     // Ip related
     public final static String OS = "OS";
