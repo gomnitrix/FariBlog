@@ -45,6 +45,9 @@ public class OAuth2ServerConfig extends AuthorizationServerConfigurerAdapter {
     @Autowired
     private UserServiceImpl userServiceImpl;
 
+    @Autowired
+    private FariTokenEndpointAuthenticationFilter fariTokenEndpointAuthenticationFilter;
+
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         JdbcClientDetailsServiceBuilder builder = clients.jdbc(dataSource);
@@ -72,5 +75,6 @@ public class OAuth2ServerConfig extends AuthorizationServerConfigurerAdapter {
         oauthServer.allowFormAuthenticationForClients();
         oauthServer.checkTokenAccess("isAuthenticated()");
         oauthServer.tokenKeyAccess("isAuthenticated()");
+        oauthServer.addTokenEndpointAuthenticationFilter(fariTokenEndpointAuthenticationFilter);
     }
 }
