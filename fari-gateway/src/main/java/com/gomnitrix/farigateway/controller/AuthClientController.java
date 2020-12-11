@@ -1,7 +1,6 @@
 package com.gomnitrix.farigateway.controller;
 
 import com.gomnitrix.commons.Response.ErrorResponse;
-import com.gomnitrix.commons.Response.SuccessResponse;
 import com.gomnitrix.commons.configuration.GatewayConstConfig;
 import com.gomnitrix.commons.configuration.GeneralConfig;
 import com.gomnitrix.commons.dto.UserDto;
@@ -13,8 +12,8 @@ import com.gomnitrix.farigateway.utils.OkHttpUtil;
 import okhttp3.ConnectionPool;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
-import okhttp3.Response;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -32,6 +31,7 @@ public class AuthClientController {
     private String clientId;
     @Value("${security.oauth2.client.client-secret}")
     private String secret;
+    @Qualifier("registerRemoteServiceImpl")
     @Autowired
     private RegisterRemoteService registerRemoteService;
 
@@ -39,30 +39,30 @@ public class AuthClientController {
             .connectionPool(new ConnectionPool(5, 20, TimeUnit.SECONDS))
             .build();
 
-    @GetMapping(value = GatewayConstConfig.CODE_PATH)
-    public String getTokenByCode(@RequestParam("code") String code) {
-        Map<String, String> body = new HashMap<>();
-        body.put("grant_type", "authorization_code");
-        body.put("client", clientId);
-        body.put("redirect_uri", GatewayConstConfig.HTTP_PREFIX + GeneralConfig.GATEWAY_REDIRECT_URI);
-        body.put("code", code);
-        Map<String, String> header = new HashMap<>();
-        header.put("Authorization", "Basic " + Base64Util.base64Encode(clientId + ":" + secret));
-        Request request = OkHttpUtil.buildPostRequest(body, GatewayConstConfig.HTTP_PREFIX + GeneralConfig.AUTH_TOKEN_URI, header);
-        try {
-            Response response = OkHttpUtil.requestExecute(request);
-            return new SuccessResponse.Builder()
-                    .addItems(OkHttpUtil.getDataFromResp(response))
-                    .build()
-                    .toJson();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
+//    @GetMapping(value = GatewayConstConfig.CODE_PATH)
+//    public String getTokenByCode(@RequestParam("code") String code) {
+//        Map<String, String> body = new HashMap<>();
+//        body.put("grant_type", "authorization_code");
+//        body.put("client", clientId);
+//        body.put("redirect_uri", GatewayConstConfig.HTTP_PREFIX + GeneralConfig.GATEWAY_REDIRECT_URI);
+//        body.put("code", code);
+//        Map<String, String> header = new HashMap<>();
+//        header.put("Authorization", "Basic " + Base64Util.base64Encode(clientId + ":" + secret));
+//        Request request = OkHttpUtil.buildPostRequest(body, GatewayConstConfig.HTTP_PREFIX + GeneralConfig.AUTH_TOKEN_URI, header);
+//        try {
+//            Response response = OkHttpUtil.requestExecute(request);
+//            return new SuccessResponse.Builder()
+//                    .addItems(OkHttpUtil.getDataFromResp(response))
+//                    .build()
+//                    .toJson();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        return null;
+//    }
 
     @PostMapping(value = GatewayConstConfig.LOGIN_PATH)
-    public String getToken(@RequestParam("userName") String userName, @RequestParam("passWord") String passWord){
+    public String getToken(@RequestParam("userName") String userName, @RequestParam("passWord") String passWord) {
         Map<String, String> body = new HashMap<>();
         body.put("grant_type", "password");
         body.put("username", userName);
@@ -72,11 +72,7 @@ public class AuthClientController {
         header.put("Authorization", "Basic " + Base64Util.base64Encode(clientId + ":" + secret));
         Request request = OkHttpUtil.buildPostRequest(body, GatewayConstConfig.HTTP_PREFIX + GeneralConfig.AUTH_TOKEN_URI, header);
         try {
-            Response response = OkHttpUtil.requestExecute(request);
-            return new SuccessResponse.Builder()
-                    .addItems(OkHttpUtil.getDataFromResp(response))
-                    .build()
-                    .toJson();
+            return OkHttpUtil.requestExecute(request).toString();
         } catch (Exception e) {
             e.printStackTrace();
             //Todo 这里需要调整，下面那个return逻辑不对
@@ -85,7 +81,7 @@ public class AuthClientController {
     }
 
     @PostMapping(value = GatewayConstConfig.REGISTER_PATH)
-    public String register(@RequestBody @Validated UserDto userDto, BindingResult errors){
+    public String register(@RequestBody @Validated UserDto userDto, BindingResult errors) {
         if (errors.hasErrors()) {
             FieldError error = errors.getFieldError();
             assert error != null;

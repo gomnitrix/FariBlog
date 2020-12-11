@@ -12,5 +12,5 @@ public abstract class AuthServerConstConfig {
     public static final String TOKEN_PATH = "/oauth/token";
     public static final String PUB_KEY_PATH = "/rsa/publicKey";
     public static final String LOGIN_PATH = "/oauth/authorize";
-    public static final String REGISTER_PATH = "/register";
+    public static final String REGISTER_PATH = "/oauth/register";
 }
