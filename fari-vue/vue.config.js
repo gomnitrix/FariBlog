@@ -27,7 +27,7 @@ module.exports = {
                 alias: {
                     //'@': path.resolve(__dirname, './src'),
                     '@': resolve('src'),
-                    '@c': resolve('./src/components')
+                    '@c': resolve('src/components')
                 } // 别名配置
             }
         })

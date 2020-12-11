@@ -21,6 +21,7 @@
           type="primary"
           plain
           style="width:100px"
+          @click="showRegisterBox = true"
         >
           Register
         </el-button>
@@ -29,26 +30,36 @@
         :show-loign-box="showLoignBox"
         @login-cancel="closeLogin"
       />
+      <RegisterBox
+        :show-register-box="showRegisterBox"
+        @register-cancel="closeRegister"
+      />
     </div>
   </div>
 </template>
 
 <script>
-import LoginBox from '../components/LoginBox/index.vue'
+import LoginBox from '@c/LoginBox/index.vue'
+import RegisterBox from '@c/LoginBox/registerBox.vue'
 export default {
   name: 'Index',
   components: {
-    LoginBox
+    LoginBox,
+    RegisterBox
   },
   data () {
     return {
       showLoignBox: false,
+      showRegisterBox: false,
       fariImgSrc: require('@/assets/FariBlog.png')
     }
   },
   methods: {
     closeLogin () {
       this.showLoignBox = false
+    },
+    closeRegister () {
+      this.showRegisterBox = false
     }
   }
 }

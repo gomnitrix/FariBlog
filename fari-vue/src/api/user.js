@@ -11,3 +11,15 @@ export function login (params) {
     params
   })
 }
+
+export function register (params) {
+  var registerURL = process.env.VUE_APP_SERVER_API + '/fariblog/register'
+  console.log('env: ' + process.env.NODE_ENV)
+  console.log('WEB_API: ' + process.env.VUE_APP_SERVER_API)
+  console.log('register url: ' + registerURL)
+  return request({
+    url: registerURL,
+    method: 'post',
+    params
+  })
+}

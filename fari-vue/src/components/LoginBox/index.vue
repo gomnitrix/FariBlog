@@ -98,6 +98,7 @@ export default {
           params.passWord = this.loginForm.passWord
           // params.isRememberMe = 1
           login(params).then(response => {
+            console.log(response)
             if (response.code === this.$ECode.SUCCESS) {
               location.replace(process.env.VUE_APP_WEB_API + '/?userId=' + response.data)
               window.location.reload()
