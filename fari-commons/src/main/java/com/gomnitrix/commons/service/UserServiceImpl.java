@@ -46,7 +46,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         user.setEmail(userDto.getEmail());
         user.setUserName(userDto.getUserName());
         user.setPassWord(encoder.encode(userDto.getPassWord()));
-        user.setUuid(uuidService.getUid());
+        user.setUid(uuidService.getUid());
         LocalDateTime current = LocalDateTime.now();
         user.setCreateTime(current);
         user.setUpdateTime(current);

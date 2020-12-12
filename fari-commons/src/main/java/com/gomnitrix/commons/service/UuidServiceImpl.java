@@ -14,8 +14,7 @@ public class UuidServiceImpl implements UuidService{
     }
 
     @Override
-    public String getUid() {
-        long uid = this.generator.getUID();
-        return String.valueOf(uid);
+    public long getUid() {
+        return this.generator.getUID();
     }
 }

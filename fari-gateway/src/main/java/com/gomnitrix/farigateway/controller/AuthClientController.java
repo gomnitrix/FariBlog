@@ -4,7 +4,7 @@ import com.gomnitrix.commons.Response.ErrorResponse;
 import com.gomnitrix.commons.configuration.GatewayConstConfig;
 import com.gomnitrix.commons.configuration.GeneralConfig;
 import com.gomnitrix.commons.dto.UserDto;
-import com.gomnitrix.commons.exception.AuthenFailedException;
+import com.gomnitrix.commons.exception.InternalErrorException;
 import com.gomnitrix.commons.exception.InvalidParameterException;
 import com.gomnitrix.commons.utils.Base64Util;
 import com.gomnitrix.farigateway.service.RegisterRemoteService;
@@ -77,7 +77,7 @@ public class AuthClientController {
             e.printStackTrace();
             //Todo 这里需要调整，下面那个return逻辑不对
         }
-        return new ErrorResponse.Builder(new AuthenFailedException()).build().toJson();
+        return new ErrorResponse.Builder(new InternalErrorException()).build().toJson();
     }
 
     @PostMapping(value = GatewayConstConfig.REGISTER_PATH)

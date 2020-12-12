@@ -17,7 +17,6 @@ import org.springframework.stereotype.Component;
 @Mapper
 @Component
 public interface UserMapper extends BaseMapper<User> {
-
-    @Update("update t_user set browser = #{browser}, os = #{os}, last_login_ip = #{last_login_ip}, last_login_time = #{last_login_time}, login_count = login_count + 1} where uid = #{uid}")
-    public void updateLoginInfo(User user);
+    @Update("update t_user set browser = #{browser}, os = #{os}, last_login_ip = #{lastLoginIp}, last_login_time = #{lastLoginTime}, login_count = login_count + 1 where uid = #{uid}")
+    void updateLoginInfo(User user);
 }

@@ -16,8 +16,9 @@ public class UserDto {
 
     @NotNull(message = "密码不能为空")
     @Length(min = 10, max = 18, message = "密码长度必须在10到18位之间")
-    @Pattern(regexp = "[0-9]\\d+", message = "密码不符合规范")
+    @Pattern(regexp = "[0-9]\\d+", message = "密码不符合规范，包含不允许的字符")
     private String passWord;
+    //TODO 更改密码格式要求
 
     @Email
     @NotNull
