@@ -14,7 +14,8 @@ public class ErrorResponse extends Response {
 
         public Builder(BaseException e) {
             this.e = e;
-            super.setCode(e.getError().getCode());
+            this.setCode(e.getError().getCode());
+            this.setStatus(e.getError().getStatus());
         }
 
         public Builder setMessage(String message){

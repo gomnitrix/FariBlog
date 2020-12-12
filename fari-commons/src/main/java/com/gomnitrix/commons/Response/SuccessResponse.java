@@ -6,6 +6,7 @@ public class SuccessResponse extends Response {
         super.setSuccess(true);
         super.setCode(0);
         super.setMessage("success");
+        super.setStatus(200);
     }
 
     public static class Builder extends Response.Builder<SuccessResponse.Builder> {

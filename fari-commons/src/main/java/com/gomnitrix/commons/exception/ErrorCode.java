@@ -1,5 +1,7 @@
 package com.gomnitrix.commons.exception;
 
+import org.springframework.http.HttpStatus;
+
 /**
  * manage all Exception code
  * AUTH FAILED -> 1XXX
@@ -7,19 +9,21 @@ package com.gomnitrix.commons.exception;
  * OTHER ERROR -> 5XXX
  */
 public enum ErrorCode {
-    JWT_VERIFICATION_FAILED(1001, "Invalid Or Expired Token."),
-    USER_NOT_FOUND(2001, "No Such User Exist"),
-    INTERNAL_ERROR(5001, "Some Internal Errors Happened"),
-    RSA_KEY_EXCEPTION(5002, "Some Error Occurs When Use Rsa Key Pairs"),
-    AUTHENTICATION_FAILED(1002, "Username Or Password Wrong."),
-    INVALID_PARAMETER(5003, "Some Error Occurs While Parsing Parameter.");
+    JWT_VERIFICATION_FAILED(1001, HttpStatus.FORBIDDEN, "Invalid Or Expired Token."),
+    AUTHENTICATION_FAILED(1002, HttpStatus.UNAUTHORIZED,"Username Or Password Wrong."),
+    USER_NOT_FOUND(2001, HttpStatus.UNAUTHORIZED, "No Such User Exist"),
+    INTERNAL_ERROR(5001, HttpStatus.INTERNAL_SERVER_ERROR, "Some Internal Errors Happened"),
+    RSA_KEY_EXCEPTION(5002, HttpStatus.INTERNAL_SERVER_ERROR, "Some Error Occurs When Use Rsa Key Pairs"),
+    INVALID_PARAMETER(5003, HttpStatus.INTERNAL_SERVER_ERROR, "Some Error Occurs While Parsing Parameter.");
 
 
     private final Integer code;
+    private final HttpStatus status;
     private String message;
 
-    ErrorCode(int code, String message){
+    ErrorCode(int code, HttpStatus status, String message){
         this.code = code;
+        this.status = status;
         this.message = message;
     }
 
@@ -30,6 +34,8 @@ public enum ErrorCode {
     public String getMessage() {
         return message;
     }
+
+    public HttpStatus getStatus() {return status;}
 
     public void setMessage(String message){
         this.message = message;
