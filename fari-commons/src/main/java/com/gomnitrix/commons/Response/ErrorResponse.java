@@ -6,7 +6,7 @@ public class ErrorResponse extends Response {
     private ErrorResponse(Builder builder, BaseException e) {
         super(builder);
         super.setSuccess(false);
-        super.setMessage(e.getError().getMessage());
+        super.setMessage(e.getMessage());
     }
 
     public static class Builder extends Response.Builder<Builder> {
@@ -15,12 +15,6 @@ public class ErrorResponse extends Response {
         public Builder(BaseException e) {
             this.e = e;
             this.setCode(e.getError().getCode());
-            this.setStatus(e.getError().getStatus());
-        }
-
-        public Builder setMessage(String message){
-            this.e.getError().setMessage(message);
-            return this;
         }
 
         @Override

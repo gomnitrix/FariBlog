@@ -1,6 +1,5 @@
 package com.gomnitrix.fariauth.controller;
 
-import com.gomnitrix.commons.Response.ErrorResponse;
 import com.gomnitrix.commons.Response.SuccessResponse;
 import com.gomnitrix.commons.configuration.AuthServerConstConfig;
 import com.gomnitrix.commons.dto.UserDto;
@@ -14,6 +13,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Objects;
+
 @RestController
 public class RegisterController {
     @Autowired
@@ -23,8 +24,7 @@ public class RegisterController {
     public String register(@RequestBody @Validated UserDto userDto, BindingResult errors) {
         if (errors.hasErrors()) {
             FieldError error = errors.getFieldError();
-            assert error != null;
-            return new ErrorResponse.Builder(new InvalidParameterException()).setMessage(error.getDefaultMessage()).build().toJson();
+            throw new InvalidParameterException(Objects.requireNonNull(error).getDefaultMessage());
         }
         userService.register(userDto);
         return new SuccessResponse.Builder().build().toJson();

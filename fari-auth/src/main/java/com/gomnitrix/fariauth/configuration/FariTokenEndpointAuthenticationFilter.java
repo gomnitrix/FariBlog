@@ -48,19 +48,19 @@ public class FariTokenEndpointAuthenticationFilter extends TokenEndpointAuthenti
         super.onUnsuccessfulAuthentication(request, response, failed);
         response.setContentType("application/json;charset=utf-8");
         PrintWriter out = response.getWriter();
-        ErrorResponse.Builder builder = new ErrorResponse.Builder(new AuthenFailedException());
+        ErrorResponse errorResponse = new ErrorResponse.Builder(new AuthenFailedException()).build();
         if (failed instanceof LockedException) {
-            builder.setMessage("账户被锁定，请联系管理员!");
+            errorResponse.setMessage("账户被锁定，请联系管理员!");
         } else if (failed instanceof CredentialsExpiredException) {
-            builder.setMessage("密码过期，请联系管理员!");
+            errorResponse.setMessage("密码过期，请联系管理员!");
         } else if (failed instanceof AccountExpiredException) {
-            builder.setMessage("账户过期，请联系管理员!");
+            errorResponse.setMessage("账户过期，请联系管理员!");
         } else if (failed instanceof DisabledException) {
-            builder.setMessage("账户被禁用，请联系管理员!");
+            errorResponse.setMessage("账户被禁用，请联系管理员!");
         } else if (failed instanceof BadCredentialsException) {
-            builder.setMessage("用户名或者密码输入错误，请重新输入!");
+            errorResponse.setMessage("用户名或者密码输入错误，请重新输入!");
         }
-        out.write(builder.build().toJson());
+        out.write(errorResponse.toJson());
         out.flush();
         out.close();
     }

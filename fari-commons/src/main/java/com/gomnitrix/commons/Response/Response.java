@@ -2,7 +2,6 @@ package com.gomnitrix.commons.Response;
 
 import com.gomnitrix.commons.utils.JsonUtil;
 import lombok.Data;
-import org.springframework.http.HttpStatus;
 import org.springframework.util.ObjectUtils;
 
 import java.util.HashMap;
@@ -12,13 +11,11 @@ import java.util.Map;
 public abstract class Response {
     private Boolean success;
     private Integer code;
-    private Integer status;
     private String message;
     private Map<String, Object> data;
 
     abstract static class Builder<T extends Builder<T>> {
         Map<String, Object> data = new HashMap<>();
-        Integer status;
         Integer code;
 
         /**
@@ -51,15 +48,9 @@ public abstract class Response {
             return self();
         }
 
-        public T setStatus(HttpStatus status){
-            this.status = status.value();
-            return self();
-        }
-
         public void clear() {
             data.clear();
             code = null;
-            status = null;
         }
 
         abstract Response build();
@@ -69,7 +60,6 @@ public abstract class Response {
 
     Response(Builder<?> builder) {
         code = builder.code;
-        status = builder.status;
         data = new HashMap<>(builder.data);
         builder.clear();
     }

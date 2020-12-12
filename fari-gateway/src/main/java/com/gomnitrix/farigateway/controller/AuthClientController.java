@@ -3,9 +3,7 @@ package com.gomnitrix.farigateway.controller;
 import com.gomnitrix.commons.Response.ErrorResponse;
 import com.gomnitrix.commons.configuration.GatewayConstConfig;
 import com.gomnitrix.commons.configuration.GeneralConfig;
-import com.gomnitrix.commons.dto.UserDto;
 import com.gomnitrix.commons.exception.InternalErrorException;
-import com.gomnitrix.commons.exception.InvalidParameterException;
 import com.gomnitrix.commons.utils.Base64Util;
 import com.gomnitrix.farigateway.service.RegisterRemoteService;
 import com.gomnitrix.farigateway.utils.OkHttpUtil;
@@ -15,10 +13,10 @@ import okhttp3.Request;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -74,19 +72,7 @@ public class AuthClientController {
         try {
             return OkHttpUtil.requestExecute(request).toString();
         } catch (Exception e) {
-            e.printStackTrace();
-            //Todo 这里需要调整，下面那个return逻辑不对
+            return new ErrorResponse.Builder(new InternalErrorException()).build().toJson();
         }
-        return new ErrorResponse.Builder(new InternalErrorException()).build().toJson();
-    }
-
-    @PostMapping(value = GatewayConstConfig.REGISTER_PATH)
-    public String register(@RequestBody @Validated UserDto userDto, BindingResult errors) {
-        if (errors.hasErrors()) {
-            FieldError error = errors.getFieldError();
-            assert error != null;
-            return new ErrorResponse.Builder(new InvalidParameterException()).setMessage(error.getDefaultMessage()).build().toJson();
-        }
-        return registerRemoteService.register(userDto);
     }
 }

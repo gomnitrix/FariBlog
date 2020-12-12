@@ -14,12 +14,12 @@ public enum ErrorCode {
     USER_NOT_FOUND(2001, HttpStatus.UNAUTHORIZED, "No Such User Exist"),
     INTERNAL_ERROR(5001, HttpStatus.INTERNAL_SERVER_ERROR, "Some Internal Errors Happened"),
     RSA_KEY_EXCEPTION(5002, HttpStatus.INTERNAL_SERVER_ERROR, "Some Error Occurs When Use Rsa Key Pairs"),
-    INVALID_PARAMETER(5003, HttpStatus.INTERNAL_SERVER_ERROR, "Some Error Occurs While Parsing Parameter.");
+    INVALID_PARAMETER(5003, HttpStatus.BAD_REQUEST, "Some Error Occurs While Parsing Parameter.");
 
 
     private final Integer code;
     private final HttpStatus status;
-    private String message;
+    private final String message;
 
     ErrorCode(int code, HttpStatus status, String message){
         this.code = code;
@@ -36,10 +36,6 @@ public enum ErrorCode {
     }
 
     public HttpStatus getStatus() {return status;}
-
-    public void setMessage(String message){
-        this.message = message;
-    }
 
     @Override
     public String toString() {
