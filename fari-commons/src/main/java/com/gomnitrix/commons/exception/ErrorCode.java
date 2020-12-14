@@ -11,7 +11,8 @@ import org.springframework.http.HttpStatus;
 public enum ErrorCode {
     JWT_VERIFICATION_FAILED(1001, HttpStatus.FORBIDDEN, "Invalid Or Expired Token."),
     AUTHENTICATION_FAILED(1002, HttpStatus.UNAUTHORIZED,"Username Or Password Wrong."),
-    USER_NOT_FOUND(2001, HttpStatus.UNAUTHORIZED, "No Such User Exist"),
+    RESOURCE_NOT_FOUND(2001, HttpStatus.NOT_FOUND, "Resource Not Found."),
+    USER_NOT_FOUND(2002, HttpStatus.UNAUTHORIZED, "No Such User Exist"),
     INTERNAL_ERROR(5001, HttpStatus.INTERNAL_SERVER_ERROR, "Some Internal Errors Happened"),
     RSA_KEY_EXCEPTION(5002, HttpStatus.INTERNAL_SERVER_ERROR, "Some Error Occurs When Use Rsa Key Pairs"),
     INVALID_PARAMETER(5003, HttpStatus.BAD_REQUEST, "Some Error Occurs While Parsing Parameter.");
