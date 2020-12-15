@@ -1,11 +1,13 @@
 package com.gomnitrix.farigateway.configuration;
 
 import com.gomnitrix.commons.configuration.GatewayConstConfig;
-import com.gomnitrix.commons.configuration.GeneralConfig;
+import com.gomnitrix.commons.utils.ArrayUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.converter.Converter;
+import org.springframework.http.codec.ServerCodecConfigurer;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
@@ -31,21 +33,25 @@ public class GatewaySecurityConfig {
         this.jwkSetUri = jwkSetUri;
     }
 
-    //    private final AuthorizationManager authorizationManager;
-//    private final RestfulAccessDeniedHandler restfulAccessDeniedHandler;
-//    private final RestAuthenticationEntryPoint restAuthenticationEntryPoint;
+    @Autowired
+    IgnoreUrlsConfig ignoreUrlsConfig;
+    @Autowired
+    RestAuthenticationEntryPoint restAuthenticationEntryPoint;
 
     @Bean
     public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
 //        http.oauth2ResourceServer().jwt()
 //                .jwtDecoder(jwtDecoder());
+        http.oauth2ResourceServer().jwt().jwtAuthenticationConverter(jwtAuthenticationConverter());
+        http.oauth2ResourceServer().authenticationEntryPoint(restAuthenticationEntryPoint);
         http.authorizeExchange()
-                //允许所有访问认证服务器的请求
-                .pathMatchers(GeneralConfig.AUTH_SHORTR_PATH + "/**").permitAll()
-                //允许访问登录接口的请求（不是认证服务器的登录接口，而是网关的登录接口）
-                .pathMatchers(GeneralConfig.FARI_LOGIN_URI).permitAll()
-                //允许访问网关中的code接口，用于认证服务器向网管传递认证码，可能会废弃
-                .pathMatchers(GeneralConfig.GATEWAY_REDIRECT_URI).permitAll()
+                .pathMatchers(ArrayUtil.toArray(ignoreUrlsConfig.getUrls(), String.class)).permitAll()
+//                //允许所有访问认证服务器的请求
+//                .pathMatchers(GeneralConfig.AUTH_SHORTR_PATH + "/**").permitAll()
+//                //允许访问登录接口的请求（不是认证服务器的登录接口，而是网关的登录接口）
+//                .pathMatchers(GeneralConfig.FARI_LOGIN_URI).permitAll()
+//                //允许访问网关中的code接口，用于认证服务器向网管传递认证码，可能会废弃
+//                .pathMatchers(GeneralConfig.GATEWAY_REDIRECT_URI).permitAll()
                 .and().csrf().disable();
         return http.build();
     }
@@ -63,5 +69,10 @@ public class GatewaySecurityConfig {
         JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
         jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(jwtGrantedAuthoritiesConverter);
         return new ReactiveJwtAuthenticationConverterAdapter(jwtAuthenticationConverter);
+    }
+
+    @Bean
+    public ServerCodecConfigurer serverCodecConfigurer() {
+        return ServerCodecConfigurer.create();
     }
 }

@@ -1,5 +1,6 @@
 package com.gomnitrix.commons.dto;
 
+import com.gomnitrix.commons.entity.Blog;
 import lombok.Data;
 
 import javax.validation.constraints.NotNull;
@@ -83,4 +84,14 @@ public class BlogDto {
      */
     @NotNull
     private Boolean openComment;
+
+    public Blog toBlog(){
+        Blog blog = new Blog();
+        //TODO 利用反射等机制将所有不为空的域都转为Blog对象中的域
+        blog.setAuthorId(this.authorId);
+        blog.setAuthor(this.author);
+        blog.setTitle(this.title);
+        blog.setContent(this.content);
+        return blog;
+    }
 }
