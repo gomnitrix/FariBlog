@@ -1,5 +1,7 @@
 package com.gomnitrix.farigateway.configuration;
 
+import com.gomnitrix.commons.Response.ErrorResponse;
+import com.gomnitrix.commons.exception.InvalidJwtException;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -16,6 +18,7 @@ import java.nio.charset.StandardCharsets;
 /**
  * 自定义返回结果：没有登录或token过期时
  * Created by macro on 2020/6/18.
+ * Modified by omnitrix on 2020/12/16.
  */
 @Component
 public class RestAuthenticationEntryPoint implements ServerAuthenticationEntryPoint {
@@ -24,7 +27,7 @@ public class RestAuthenticationEntryPoint implements ServerAuthenticationEntryPo
         ServerHttpResponse response = exchange.getResponse();
         response.setStatusCode(HttpStatus.OK);
         response.getHeaders().add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
-        String body= "entrypoint";
+        String body= new ErrorResponse.Builder(new InvalidJwtException()).build().toJson();
         DataBuffer buffer =  response.bufferFactory().wrap(body.getBytes(StandardCharsets.UTF_8));
         return response.writeWith(Mono.just(buffer));
     }

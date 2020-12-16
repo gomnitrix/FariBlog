@@ -3,7 +3,6 @@ package com.gomnitrix.farigateway.configuration;
 import com.gomnitrix.commons.configuration.GatewayConstConfig;
 import com.gomnitrix.commons.utils.ArrayUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.converter.Converter;
@@ -11,8 +10,6 @@ import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.oauth2.jwt.Jwt;
-import org.springframework.security.oauth2.jwt.NimbusReactiveJwtDecoder;
-import org.springframework.security.oauth2.jwt.ReactiveJwtDecoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.oauth2.server.resource.authentication.ReactiveJwtAuthenticationConverterAdapter;
@@ -26,38 +23,26 @@ import reactor.core.publisher.Mono;
 @Configuration
 @EnableWebFluxSecurity
 public class GatewaySecurityConfig {
-    private final String jwkSetUri;
-
-    public GatewaySecurityConfig(@Value("${spring.security.oauth2.resourceserver.jwt.jwk-set-uri}") final String jwkSetUri) {
-        this.jwkSetUri = jwkSetUri;
-    }
-
     @Autowired
     IgnoreUrlsConfig ignoreUrlsConfig;
+
+    @Autowired
+    AuthorizationManager authorizationManager;
+
+
     @Autowired
     RestAuthenticationEntryPoint restAuthenticationEntryPoint;
 
     @Bean
     public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
-//        http.oauth2ResourceServer().jwt()
-//                .jwtDecoder(jwtDecoder());
         http.oauth2ResourceServer().jwt().jwtAuthenticationConverter(jwtAuthenticationConverter());
         http.oauth2ResourceServer().authenticationEntryPoint(restAuthenticationEntryPoint);
+        //TODO micro-auth项目中还实现了一个用于验证通过但没有资源的访问权限时的处理类 RestfulAccessDeniedHandler，目前没搞明白怎么区分这两种
         http.authorizeExchange()
                 .pathMatchers(ArrayUtil.toArray(ignoreUrlsConfig.getUrls(), String.class)).permitAll()
-//                //允许所有访问认证服务器的请求
-//                .pathMatchers(GeneralConfig.AUTH_SHORTR_PATH + "/**").permitAll()
-//                //允许访问登录接口的请求（不是认证服务器的登录接口，而是网关的登录接口）
-//                .pathMatchers(GeneralConfig.FARI_LOGIN_URI).permitAll()
-//                //允许访问网关中的code接口，用于认证服务器向网管传递认证码，可能会废弃
-//                .pathMatchers(GeneralConfig.GATEWAY_REDIRECT_URI).permitAll()
+                .anyExchange().access(authorizationManager)
                 .and().csrf().disable();
         return http.build();
-    }
-
-    @Bean
-    ReactiveJwtDecoder jwtDecoder() {
-        return NimbusReactiveJwtDecoder.withJwkSetUri(this.jwkSetUri).build();
     }
 
     @Bean

@@ -1,6 +1,7 @@
 package com.gomnitrix.farigateway.controller;
 
 import com.gomnitrix.commons.Response.ErrorResponse;
+import com.gomnitrix.commons.Response.SuccessResponse;
 import com.gomnitrix.commons.configuration.GatewayConstConfig;
 import com.gomnitrix.commons.configuration.GeneralConfig;
 import com.gomnitrix.commons.exception.InternalErrorException;
@@ -10,6 +11,7 @@ import com.gomnitrix.farigateway.utils.OkHttpUtil;
 import okhttp3.ConnectionPool;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -70,7 +72,11 @@ public class AuthClientController {
         header.put("Authorization", "Basic " + Base64Util.base64Encode(clientId + ":" + secret));
         Request request = OkHttpUtil.buildPostRequest(body, GatewayConstConfig.HTTP_PREFIX + GeneralConfig.AUTH_TOKEN_URI, header);
         try {
-            return OkHttpUtil.requestExecute(request).toString();
+            Response resp =  OkHttpUtil.requestExecute(request);
+            return new SuccessResponse.Builder()
+                                    .addItems(OkHttpUtil.getDataFromResp(resp))
+                                    .build()
+                                    .toJson();
         } catch (Exception e) {
             return new ErrorResponse.Builder(new InternalErrorException()).build().toJson();
         }

@@ -49,6 +49,7 @@ public class FariTokenEndpointAuthenticationFilter extends TokenEndpointAuthenti
         response.setContentType("application/json;charset=utf-8");
         PrintWriter out = response.getWriter();
         ErrorResponse errorResponse = new ErrorResponse.Builder(new AuthenFailedException()).build();
+        //TODO 这里会取到自定义的异常，因此不会进入下面任何一个if
         if (failed instanceof LockedException) {
             errorResponse.setMessage("账户被锁定，请联系管理员!");
         } else if (failed instanceof CredentialsExpiredException) {

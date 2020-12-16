@@ -3,6 +3,7 @@ package com.gomnitrix.commons.service;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.gomnitrix.commons.dto.BlogDto;
 import com.gomnitrix.commons.entity.Blog;
 import com.gomnitrix.commons.exception.ResourceNotFoundException;
@@ -15,7 +16,7 @@ import java.util.List;
 
 @Service
 @Slf4j
-public class BlogServiceImpl implements BlogService {
+public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog> implements BlogService {
     @Autowired
     UuidService uuidService;
     @Autowired

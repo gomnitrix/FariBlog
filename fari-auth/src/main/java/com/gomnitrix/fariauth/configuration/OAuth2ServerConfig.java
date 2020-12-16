@@ -45,18 +45,10 @@ public class OAuth2ServerConfig extends AuthorizationServerConfigurerAdapter {
     @Autowired
     private UserServiceImpl userServiceImpl;
 
-//    @Qualifier("jdbcClientDetailsService")
-//    @Autowired
-//    private ClientDetailsService jdbcClientService;
-//
-//    @Autowired
-//    private FariTokenEndpointAuthenticationFilter fariTokenEndpointAuthenticationFilter;
-
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         JdbcClientDetailsServiceBuilder builder = clients.jdbc(dataSource);
         builder.passwordEncoder(passwordEncoder);
-//        clients.withClientDetails(jdbcClientService);
     }
 
     @Override
