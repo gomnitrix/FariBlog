@@ -35,23 +35,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 // 基于token，不需要session
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests()
-                // 允许对于网站静态资源的无授权访问
-                .antMatchers(
-                        "/swagger-ui.html",
-                        "/swagger-ui/*",
-                        "/swagger-resources/**",
-                        "/v2/api-docs",
-                        "/v3/api-docs",
-                        "/webjars/**",
-                        "/actuator/**",
-                        "/druid/**"
-                ).permitAll()
-                // 对于获取token的rest api要允许匿名访问
-                .antMatchers(
-                        "/index/**"
-                ).permitAll()
-                // 除上面外的所有请求全部需要鉴权认证
-                .anyRequest().authenticated();
+                // 所有请求在网关处已经做过认证，这里无需再次验证
+                .antMatchers("/**").permitAll();
         // 禁用缓存
         http.headers().cacheControl();
     }
