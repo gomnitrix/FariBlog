@@ -41,9 +41,20 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog> implements Bl
     }
 
     @Override
-    public long addBlog(BlogDto blog) {
+    public List<Blog> getBlogsInfoByUserID(long userID, int pageIndex, int pageSize) {
+        QueryWrapper<Blog> wrapper = new QueryWrapper<>();
+        wrapper.select("uid", "title", "summary", "create_time")
+                .eq("author_id", userID)
+                .orderByDesc("create_time");
+        IPage<Blog> blogsInfo = blogMapper.selectPage(new Page<>(pageIndex, pageSize), wrapper);
+        return blogsInfo.getRecords();
+    }
+
+    @Override
+    public long addBlog(long userID, BlogDto blog) {
         Blog newBlog = blog.toBlog();
         newBlog.setUid(uuidService.getUid());
-        return 0;
+        blogMapper.insert(newBlog);
+        return newBlog.getUid();
     }
 }

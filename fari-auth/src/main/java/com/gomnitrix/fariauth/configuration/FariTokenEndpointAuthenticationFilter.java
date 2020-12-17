@@ -1,11 +1,8 @@
 package com.gomnitrix.fariauth.configuration;
 
 import com.gomnitrix.commons.Response.ErrorResponse;
-import com.gomnitrix.commons.configuration.GeneralConfig;
-import com.gomnitrix.commons.entity.User;
 import com.gomnitrix.commons.exception.AuthenFailedException;
 import com.gomnitrix.commons.service.UserServiceImpl;
-import com.gomnitrix.fariauth.utils.IpUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.Authentication;
@@ -18,8 +15,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.time.LocalDateTime;
-import java.util.Map;
 
 @Component
 public class FariTokenEndpointAuthenticationFilter extends TokenEndpointAuthenticationFilter {
@@ -33,14 +28,15 @@ public class FariTokenEndpointAuthenticationFilter extends TokenEndpointAuthenti
     @Override
     protected void onSuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, Authentication authResult) throws IOException {
         super.onSuccessfulAuthentication(request, response, authResult);
-        User user = (User) authResult.getPrincipal();
-        String ip = IpUtils.getIpAddr(request);
-        Map<String, String> userMap = IpUtils.getOsAndBrowserInfo(request);
-        user.setBrowser(userMap.get(GeneralConfig.BROWSER));
-        user.setOs(userMap.get(GeneralConfig.OS));
-        user.setLastLoginIp(ip);
-        user.setLastLoginTime(LocalDateTime.now());
-        service.updateLoginInfoById(user);
+        //TODO 修复IP 浏览器等信息解析
+//        User user = (User) authResult.getPrincipal();
+//        String ip = IpUtils.getIpAddr(request);
+//        Map<String, String> userMap = IpUtils.getOsAndBrowserInfo(request);
+//        user.setBrowser(userMap.get(GeneralConfig.BROWSER));
+//        user.setOs(userMap.get(GeneralConfig.OS));
+//        user.setLastLoginIp(ip);
+//        user.setLastLoginTime(LocalDateTime.now());
+//        service.updateLoginInfoById(user);
     }
 
     @Override

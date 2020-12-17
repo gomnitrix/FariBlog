@@ -74,16 +74,15 @@ public class BlogDto {
     private Long blogSortUid;
 
     /**
+     * 是否开启评论(0:否 1:是)
+     */
+    private Boolean openComment;
+
+    /**
      * 是否发布：0：否，1：是
      */
 
     private String isPublish;
-
-    /**
-     * 是否开启评论(0:否 1:是)
-     */
-    @NotNull
-    private Boolean openComment;
 
     public Blog toBlog(){
         Blog blog = new Blog();

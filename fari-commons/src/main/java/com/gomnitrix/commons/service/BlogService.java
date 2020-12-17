@@ -15,5 +15,7 @@ public interface BlogService {
 
     public List<Blog> getBlogsByUserID(long userID, int pageIndex, int pageSize);
 
-    public long addBlog(BlogDto blog);
+    public List<Blog> getBlogsInfoByUserID(long userID, int pageIndex, int pageSize);
+
+    public long addBlog(long userID, BlogDto blog);
 }
