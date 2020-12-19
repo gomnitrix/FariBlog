@@ -11,14 +11,13 @@ const routes = [
     component: Index
   },
   {
-    path: '/home/:userId',
+    path: '/index/:userId',
     component: Home
   }
 ]
 
 const router = new Router({
-  mode: 'history',
-  routes
+  routes: routes
 })
 
 export default router

@@ -27,7 +27,8 @@ const FUNCTIONS = {
     info: function (message) {
       Message({
         showClose: true,
-        message: message || '提示'
+        message: message || '提示',
+        type: 'info'
       })
     },
     error: function (message) {

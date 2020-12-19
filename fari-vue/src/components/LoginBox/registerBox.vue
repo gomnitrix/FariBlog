@@ -116,13 +116,13 @@ export default {
         ],
         userName: [
           { required: true, message: '请输入用户名', trigger: 'blur' },
-          { min: 5, message: '用户名长度大于等于 5 个字符', trigger: 'blur' },
-          { max: 20, message: '用户名长度不能大于 20 个字符', trigger: 'blur' }
+          { min: 4, message: '用户名长度大于等于 4 个字符', trigger: 'blur' },
+          { max: 12, message: '用户名长度不能大于 12 个字符', trigger: 'blur' }
         ],
         passWord: [
           { required: true, message: '请输入密码', trigger: 'blur' },
-          { min: 5, message: '密码长度需要大于等于 5 个字符', trigger: 'blur' },
-          { max: 20, message: '密码长度不能大于 20 个字符', trigger: 'blur' }
+          { min: 10, message: '密码长度需要大于等于 10 个字符', trigger: 'blur' },
+          { max: 18, message: '密码长度不能大于 18 个字符', trigger: 'blur' }
         ],
         rePassWord: [
           { required: true, message: '请再次输入密码', trigger: 'blur' },
@@ -144,8 +144,13 @@ export default {
           params.passWord = this.registerForm.passWord
           register(params).then(response => {
             if (response.code === this.$ECode.SUCCESS) {
-              location.replace(process.env.VUE_APP_WEB_API + '/?userId=' + response.data)
-              window.location.reload()
+              this.$message({
+                type: 'success',
+                message: 'register success!'
+              })
+              setTimeout(function () {
+                location.replace(process.env.VUE_APP_WEB_API)
+              }, 1500)
             } else {
               this.$message({
                 type: 'error',

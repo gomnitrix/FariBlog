@@ -58,6 +58,7 @@
 
 <script>
 import { login } from '@/api/user'
+import { setCookie } from '@/utils/cookieUtils'
 export default {
   name: 'Login',
   props: {
@@ -75,13 +76,13 @@ export default {
       loginRules: {
         userName: [
           { required: true, message: '请输入用户名', trigger: 'blur' },
-          { min: 5, message: '用户名长度大于等于 5 个字符', trigger: 'blur' },
-          { max: 20, message: '用户名长度不能大于 20 个字符', trigger: 'blur' }
+          { min: 4, message: '用户名长度大于等于 4 个字符', trigger: 'blur' },
+          { max: 12, message: '用户名长度不能大于 12 个字符', trigger: 'blur' }
         ],
         passWord: [
           { required: true, message: '请输入密码', trigger: 'blur' },
-          { min: 5, message: '密码长度需要大于等于 5 个字符', trigger: 'blur' },
-          { max: 20, message: '密码长度不能大于 20 个字符', trigger: 'blur' }
+          { min: 10, message: '密码长度需要大于等于 10 个字符', trigger: 'blur' },
+          { max: 18, message: '密码长度不能大于 18 个字符', trigger: 'blur' }
         ]
       },
       labelPosition: 'right'
@@ -98,14 +99,20 @@ export default {
           params.passWord = this.loginForm.passWord
           // params.isRememberMe = 1
           login(params).then(response => {
-            console.log(response)
             if (response.code === this.$ECode.SUCCESS) {
-              location.replace(process.env.VUE_APP_WEB_API + '/?userId=' + response.data)
-              window.location.reload()
+              this.$message({
+                type: 'success',
+                message: response.message
+              })
+              setCookie('access_token', response.data.access_token)
+              setCookie('refresh_token', response.data.refresh_token)
+              setTimeout(function () {
+                location.replace(process.env.VUE_APP_WEB_API + `/index/${response.data.userId}`)
+              }, 2000)
             } else {
               this.$message({
                 type: 'error',
-                message: response.data
+                message: response.message
               })
             }
           })
