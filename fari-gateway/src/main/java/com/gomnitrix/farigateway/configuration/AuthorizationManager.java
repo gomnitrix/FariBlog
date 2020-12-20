@@ -3,6 +3,7 @@ package com.gomnitrix.farigateway.configuration;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.security.authorization.AuthorizationDecision;
 import org.springframework.security.authorization.ReactiveAuthorizationManager;
@@ -48,8 +49,8 @@ public class AuthorizationManager implements ReactiveAuthorizationManager<Author
         ServerWebExchange exchange = authorizationContext.getExchange();
         //请求资源
         String requestPath = exchange.getRequest().getURI().getPath();
-        // 是否直接放行
-        if (permitAll(requestPath)) {
+        // 是否直接放行，对于预检请求也需直接放行
+        if (permitAll(requestPath) || exchange.getRequest().getMethod() == HttpMethod.OPTIONS) {
             return Mono.just(new AuthorizationDecision(true));
         }
         String raw_token = exchange.getRequest().getHeaders().getFirst("Authorization");
