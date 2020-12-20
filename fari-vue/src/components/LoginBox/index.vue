@@ -58,7 +58,7 @@
 
 <script>
 import { login } from '@/api/user'
-import { setCookie } from '@/utils/cookieUtils'
+import { setCookie, clearCookie } from '@/utils/cookieUtils'
 export default {
   name: 'Login',
   props: {
@@ -98,15 +98,19 @@ export default {
           params.userName = this.loginForm.userName
           params.passWord = this.loginForm.passWord
           // params.isRememberMe = 1
+          clearCookie('access_token')
+          clearCookie('refresh_token')
           login(params).then(response => {
             if (response.code === this.$ECode.SUCCESS) {
               this.$message({
                 type: 'success',
                 message: response.message
               })
-              setCookie('access_token', response.data.access_token)
-              setCookie('refresh_token', response.data.refresh_token)
+              // 这里先暂时设置过期时间为1天(实际上还是取决于后端颁发的jwt)
+              setCookie('access_token', response.data.access_token, 1)
+              setCookie('refresh_token', response.data.refresh_token, 1)
               setTimeout(function () {
+                console.log(process.env.VUE_APP_WEB_API + `/index/${response.data.userId}`)
                 location.replace(process.env.VUE_APP_WEB_API + `/index/${response.data.userId}`)
               }, 2000)
             } else {

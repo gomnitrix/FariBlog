@@ -9,14 +9,14 @@ const service = axios.create({
   timeout: 10000 // 请求超时时间 10秒
 })
 
-service.defaults.headers.common.Authorization = getCookie()
+service.defaults.headers.common.Authorization = getCookie('access_token')
 
 // request拦截器
 service.interceptors.request.use(
   config => {
-    // eslint-disable-next-line eqeqeq
-    if (getCookie() != null && getCookie() != undefined) {
-      config.headers.Authorization = getCookie() // 让每个请求携带自定义token 请根据实际情况自行修改
+    var token = getCookie('access_token')
+    if (token != null) {
+      config.headers.Authorization = token // 让每个请求携带自定义token 请根据实际情况自行修改
     }
     return config
   },

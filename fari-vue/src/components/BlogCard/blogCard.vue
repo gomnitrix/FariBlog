@@ -1,5 +1,8 @@
 <template>
-  <el-card :body-style="{ padding: '0px' }">
+  <el-card
+    :body-style="{ padding: '0px' }"
+    shadow="hover"
+  >
     <img
       :src="fariImgSrc"
       class="image"

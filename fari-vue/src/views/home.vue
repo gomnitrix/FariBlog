@@ -5,9 +5,14 @@
       v-for="(blog, index) in blogs"
       :key="index"
     >
-      <BlogCard
-        :blog-info="blog"
-      />
+      <el-col
+        :span="8"
+        :offset="8"
+      >
+        <BlogCard
+          :blog-info="blog"
+        />
+      </el-col>
     </el-row>
   </div>
 </template>
@@ -27,10 +32,12 @@ export default {
       pageIndex: 1
     }
   },
+  mounted: function () {
+    this.loadBlogs()
+  },
   methods: {
     loadBlogs () {
       getBlogsInfo(this.pageSize, this.pageIndex).then(response => {
-        console.log(response)
         if (response.code === this.$ECode.SUCCESS) {
           this.blogs = response.data.blogs
         } else {
