@@ -41,9 +41,9 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog> implements Bl
     }
 
     @Override
-    public List<Blog> getBlogsInfoByUserID(long userID, int pageIndex, int pageSize) {
+    public List<Blog> getBlogsInfoByUserID(long userID, int pageIndex, int pageSize, String... columns) {
         QueryWrapper<Blog> wrapper = new QueryWrapper<>();
-        wrapper.select("uid", "title", "summary", "create_time")
+        wrapper.select(columns)
                 .eq("author_id", userID)
                 .orderByDesc("create_time");
         IPage<Blog> blogsInfo = blogMapper.selectPage(new Page<>(pageIndex, pageSize), wrapper);

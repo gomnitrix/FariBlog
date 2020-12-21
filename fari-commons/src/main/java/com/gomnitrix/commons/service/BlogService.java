@@ -13,9 +13,29 @@ public interface BlogService {
      */
     public Blog getBlogByUid(long uid);
 
+    /**
+     * 通过用户ID，以分页查询方式获取对应用户的所有博客
+     * @param userID
+     * @param pageIndex
+     * @param pageSize
+     * @return
+     */
     public List<Blog> getBlogsByUserID(long userID, int pageIndex, int pageSize);
 
-    public List<Blog> getBlogsInfoByUserID(long userID, int pageIndex, int pageSize);
+    /**
+     * 通过用户uid，以分页查询方式获取用户的所有博客摘要
+     * @param userID
+     * @param pageIndex
+     * @param pageSize
+     * @return
+     */
+    public List<Blog> getBlogsInfoByUserID(long userID, int pageIndex, int pageSize, String... columns);
 
+    /**
+     * 为用户添加一篇博客
+     * @param userID
+     * @param blog
+     * @return
+     */
     public long addBlog(long userID, BlogDto blog);
 }

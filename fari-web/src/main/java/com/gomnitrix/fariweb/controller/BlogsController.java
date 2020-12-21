@@ -24,14 +24,25 @@ public class BlogsController {
 
     SuccessResponse.Builder respBuilder = new SuccessResponse.Builder();
 
+    /**
+     * 给前端用户主页的博客card返回摘要信息
+     * @param pageIndex 分页查询页面索引
+     * @param pageSize 分页查询页面大小
+     * @param userId 用户ID
+     * @return 标准返回类包装的博客摘要信息
+     */
     @GetMapping("/blogsInfo/{pageSize}/{pageIndex}")
-    public String getBlogsInfo(@PathVariable int pageIndex, @PathVariable int pageSize, @RequestHeader("userId") String userId){
-        List<Blog> blogs = blogService.getBlogsInfoByUserID(Long.parseLong(userId), pageIndex, pageSize);
+    public String getBlogsInfo(@PathVariable int pageIndex, @PathVariable int pageSize, @RequestHeader("userId") String userId) {
+        List<Blog> blogs = blogService.getBlogsInfoByUserID(Long.parseLong(userId), pageIndex, pageSize,
+                "uid", "title", "summary", "create_time");
         return respBuilder.addItem("blogs", blogs).build().toJson();
     }
 
+    /**
+     * 为当前jwt代表的登录用户插入一条博客
+     */
     @PostMapping("/blog")
-    public String addBlogs(@RequestBody @Validated BlogDto blogDto, BindingResult errors, @RequestHeader("userId") String userId){
+    public String addBlogs(@RequestBody @Validated BlogDto blogDto, BindingResult errors, @RequestHeader("userId") String userId) {
         if (errors.hasErrors()) {
             FieldError error = errors.getFieldError();
             throw new InvalidParameterException(Objects.requireNonNull(error).getDefaultMessage());

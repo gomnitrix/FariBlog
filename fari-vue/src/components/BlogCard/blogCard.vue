@@ -1,6 +1,7 @@
 <template>
   <el-card
     :body-style="{ padding: '0px' }"
+    style="padding: '30px 0px 0px 0px'; border-radius: 10px;"
     shadow="hover"
   >
     <img
@@ -8,10 +9,10 @@
       class="image"
     >
     <div style="padding: 14px;">
-      <h2>{{ blogInfo.title }}</h2>
+      <h2><strong>{{ blogInfo.title }}</strong></h2>
       <div class="bottom clearfix">
-        <p> {{ blogInfo.description }} </p>
-        <time class="time">{{ blogInfo.postTime }}</time>
+        <p> {{ blogInfo.summary }} </p>
+        <time class="time">{{ blogInfo.createTime }}</time>
       </div>
     </div>
   </el-card>
@@ -26,8 +27,8 @@ export default {
       default: function () {
         return {
           title: 'title',
-          description: 'description',
-          postTime: 'postTime'
+          summary: 'description',
+          createTime: 'postTime'
         }
       }
     }
@@ -41,6 +42,10 @@ export default {
 </script>
 
 <style>
+  .el-card:hover{
+    margin-top: -5px;
+  }
+
   .time {
     font-size: 13px;
     color: #999;
@@ -58,6 +63,7 @@ export default {
 
   .image {
     width: 100%;
+    height: 268px;
     display: block;
   }
 
