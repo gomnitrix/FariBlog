@@ -32,6 +32,14 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog> implements Bl
     }
 
     @Override
+    public long getPagesNum(long userID, int pageSize) {
+        QueryWrapper<Blog> wrapper = new QueryWrapper<>();
+        wrapper.eq("author_id", userID);
+        IPage<Blog> blogs = blogMapper.selectPage(new Page<>(1, pageSize), wrapper);
+        return blogs.getPages();
+    }
+
+    @Override
     public List<Blog> getBlogsByUserID(long userID, int pageIndex, int pageSize) {
         QueryWrapper<Blog> wrapper = new QueryWrapper<>();
         wrapper.eq("author_id", userID)
@@ -47,6 +55,7 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog> implements Bl
                 .eq("author_id", userID)
                 .orderByDesc("create_time");
         IPage<Blog> blogsInfo = blogMapper.selectPage(new Page<>(pageIndex, pageSize), wrapper);
+        blogsInfo.getPages();
         return blogsInfo.getRecords();
     }
 

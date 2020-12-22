@@ -22,20 +22,19 @@ public class BlogsController {
     @Autowired
     BlogService blogService;
 
-    SuccessResponse.Builder respBuilder = new SuccessResponse.Builder();
-
     /**
      * 给前端用户主页的博客card返回摘要信息
+     *
      * @param pageIndex 分页查询页面索引
-     * @param pageSize 分页查询页面大小
-     * @param userId 用户ID
+     * @param pageSize  分页查询页面大小
+     * @param userId    用户ID
      * @return 标准返回类包装的博客摘要信息
      */
     @GetMapping("/blogsInfo/{pageSize}/{pageIndex}")
     public String getBlogsInfo(@PathVariable int pageIndex, @PathVariable int pageSize, @RequestHeader("userId") String userId) {
         List<Blog> blogs = blogService.getBlogsInfoByUserID(Long.parseLong(userId), pageIndex, pageSize,
                 "uid", "title", "summary", "create_time");
-        return respBuilder.addItem("blogs", blogs).build().toJson();
+        return new SuccessResponse.Builder().addItem("blogs", blogs).build().toJson();
     }
 
     /**
@@ -48,6 +47,13 @@ public class BlogsController {
             throw new InvalidParameterException(Objects.requireNonNull(error).getDefaultMessage());
         }
         long blogUid = blogService.addBlog(Long.parseLong(userId), blogDto);
-        return respBuilder.addItem("blogID", blogUid).build().toJson();
+        return new SuccessResponse.Builder().addItem("blogID", blogUid).build().toJson();
+    }
+
+    @GetMapping("/pageNum/{pageSize}")
+    public String getPageNum(@PathVariable int pageSize, @RequestHeader("userId") String userId) {
+        return new SuccessResponse.Builder()
+                .addItem("pages", blogService.getPagesNum(Long.parseLong(userId), pageSize))
+                .build().toJson();
     }
 }

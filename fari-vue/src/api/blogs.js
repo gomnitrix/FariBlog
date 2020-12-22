@@ -7,3 +7,11 @@ export function getBlogsInfo (pageSize, pageIndex) {
     method: 'get'
   })
 }
+
+export function getPagesNum (pageSize) {
+  var remoteUrl = process.env.VUE_APP_SERVER_API + `/fariWeb/index/pageNum/${pageSize}`
+  return request({
+    url: remoteUrl,
+    method: 'get'
+  })
+}

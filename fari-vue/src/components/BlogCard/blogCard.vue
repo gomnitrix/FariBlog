@@ -8,12 +8,10 @@
       :src="fariImgSrc"
       class="image"
     >
-    <div style="padding: 14px;">
+    <div style="padding: 10px 60px 60px 60px;">
       <h2><strong>{{ blogInfo.title }}</strong></h2>
-      <div class="bottom clearfix">
-        <p> {{ blogInfo.summary }} </p>
-        <time class="time">{{ blogInfo.createTime }}</time>
-      </div>
+      <p> {{ blogInfo.summary }} </p>
+      <time class="time"> Posted {{ getDate() }}</time>
     </div>
   </el-card>
 </template>
@@ -36,6 +34,15 @@ export default {
   data () {
     return {
       fariImgSrc: require('@/assets/FariBlog.png')
+    }
+  },
+  methods: {
+    getDate () {
+      var postDate = this.blogInfo.createTime
+      var year = postDate.date.year
+      var month = postDate.date.month
+      var day = postDate.date.day
+      return `${year}.${month}.${day}`
     }
   }
 }

@@ -11,7 +11,9 @@ public interface BlogService {
      * @param uid
      * @return
      */
-    public Blog getBlogByUid(long uid);
+    Blog getBlogByUid(long uid);
+
+    long getPagesNum(long userID, int pageSize);
 
     /**
      * 通过用户ID，以分页查询方式获取对应用户的所有博客
@@ -20,7 +22,7 @@ public interface BlogService {
      * @param pageSize
      * @return
      */
-    public List<Blog> getBlogsByUserID(long userID, int pageIndex, int pageSize);
+    List<Blog> getBlogsByUserID(long userID, int pageIndex, int pageSize);
 
     /**
      * 通过用户uid，以分页查询方式获取用户的所有博客摘要
@@ -29,7 +31,7 @@ public interface BlogService {
      * @param pageSize
      * @return
      */
-    public List<Blog> getBlogsInfoByUserID(long userID, int pageIndex, int pageSize, String... columns);
+    List<Blog> getBlogsInfoByUserID(long userID, int pageIndex, int pageSize, String... columns);
 
     /**
      * 为用户添加一篇博客
@@ -37,5 +39,5 @@ public interface BlogService {
      * @param blog
      * @return
      */
-    public long addBlog(long userID, BlogDto blog);
+    long addBlog(long userID, BlogDto blog);
 }

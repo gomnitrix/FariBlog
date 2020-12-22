@@ -2,6 +2,7 @@ package com.gomnitrix.commons.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.gomnitrix.commons.configuration.GeneralConfig;
 import com.gomnitrix.commons.dto.UserDto;
 import com.gomnitrix.commons.entity.User;
 import com.gomnitrix.commons.exception.UserNotFoundException;
@@ -12,8 +13,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDateTime;
 
 @Service
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserDetailsService {
@@ -47,9 +46,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         user.setUserName(userDto.getUserName());
         user.setPassWord(encoder.encode(userDto.getPassWord()));
         user.setUid(uuidService.getUid());
-        LocalDateTime current = LocalDateTime.now();
-        user.setCreateTime(current);
-        user.setUpdateTime(current);
+        user.setSource(GeneralConfig.FARIBLOG);
         userMapper.insert(user);
     }
 }

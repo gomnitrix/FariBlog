@@ -5,6 +5,7 @@
     :modal-append-to-body="false"
     title="Register"
     center
+    style="border-radius: 10px;"
   >
     <el-form
       ref="registerForm"

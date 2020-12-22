@@ -5,6 +5,7 @@
     :modal-append-to-body="false"
     title="Login"
     center
+    style="border-radius: 10px;"
   >
     <el-form
       ref="loginForm"
