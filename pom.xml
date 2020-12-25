@@ -21,6 +21,7 @@
         <module>fari-auth</module>
         <module>fari-gateway</module>
         <module>fari-web</module>
+        <module>fari-image</module>
     </modules>
 
     <properties>
