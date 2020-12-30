@@ -14,6 +14,6 @@ module.exports = {
   ],//插件，此插件用于识别文件中的js代码，没有MIME类型标识没有script标签也可以识别到，因此拿来识别.vue文件中的js代码
   "parserOptions": {
     "sourceType": "module",
-    "ecmaVersion": 7
+    "ecmaVersion": 8
   }
 }
