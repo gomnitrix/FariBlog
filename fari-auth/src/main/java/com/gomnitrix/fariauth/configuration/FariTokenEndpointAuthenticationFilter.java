@@ -1,5 +1,7 @@
 package com.gomnitrix.fariauth.configuration;
 
+import com.gomnitrix.commons.Response.ErrorResponse;
+import com.gomnitrix.commons.exception.AuthenFailedException;
 import com.gomnitrix.commons.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.*;
@@ -12,6 +14,7 @@ import org.springframework.stereotype.Component;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
 
 @Component
 public class FariTokenEndpointAuthenticationFilter extends TokenEndpointAuthenticationFilter {
@@ -39,20 +42,25 @@ public class FariTokenEndpointAuthenticationFilter extends TokenEndpointAuthenti
     @Override
     protected void onUnsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException {
         super.onUnsuccessfulAuthentication(request, response, failed);
-        String message;
+        response.setContentType("application/json;charset=utf-8");
+        PrintWriter out = response.getWriter();
+        ErrorResponse errorResponse = new ErrorResponse.Builder(new AuthenFailedException()).build();
+        //TODO 这里会取到自定义的异常，因此不会进入下面任何一个if
         if (failed instanceof LockedException) {
-            message = "账户被锁定，请联系管理员!";
+            errorResponse.setMessage("账户被锁定，请联系管理员!");
         } else if (failed instanceof CredentialsExpiredException) {
-            message = "密码过期，请联系管理员!";
+            errorResponse.setMessage("密码过期，请联系管理员!");
         } else if (failed instanceof AccountExpiredException) {
-            message = "账户过期，请联系管理员!";
+            errorResponse.setMessage("账户过期，请联系管理员!");
         } else if (failed instanceof DisabledException) {
-            message = "账户被禁用，请联系管理员!";
+            errorResponse.setMessage("账户被禁用，请联系管理员!");
         } else if (failed instanceof BadCredentialsException) {
-            message = "用户名或者密码输入错误，请重新输入!";
+            errorResponse.setMessage("用户名或者密码输入错误，请重新输入!");
         } else {
-            message = "验证失败，请检查后重试!";
+            errorResponse.setMessage("验证失败，请检查后重试!");
         }
-        request.setAttribute("message", message);
+        out.write(errorResponse.toJson());
+        out.flush();
+        out.close();
     }
 }

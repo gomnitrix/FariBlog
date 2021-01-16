@@ -28,6 +28,12 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(value = Exception.class)
     public ResponseEntity<?> handler(Exception exception, HttpServletRequest request) {
+        if (exception instanceof IllegalStateException
+            && exception.getMessage().equals("getWriter() has already been called for this response")
+        ){
+            // 对应在Auth服务中认证失败时手动调用getWriter的异常
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
         log.info("Exception URI: " + request.getRequestURI());
         log.debug("Exception Trace: " + Arrays.toString(exception.getStackTrace()));
         String response = new ErrorResponse.Builder(new InternalErrorException()).build().toJson();

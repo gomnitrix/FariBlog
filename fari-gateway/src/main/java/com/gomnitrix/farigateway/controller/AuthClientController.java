@@ -1,8 +1,10 @@
 package com.gomnitrix.farigateway.controller;
 
 import com.gomnitrix.commons.Response.ErrorResponse;
+import com.gomnitrix.commons.Response.SuccessResponse;
 import com.gomnitrix.commons.configuration.GatewayConstConfig;
 import com.gomnitrix.commons.configuration.GeneralConfig;
+import com.gomnitrix.commons.exception.AuthenFailedException;
 import com.gomnitrix.commons.exception.InternalErrorException;
 import com.gomnitrix.commons.utils.Base64Util;
 import com.gomnitrix.farigateway.service.RegisterRemoteService;
@@ -71,8 +73,16 @@ public class AuthClientController {
         header.put("Authorization", "Basic " + Base64Util.base64Encode(clientId + ":" + secret));
         Request request = OkHttpUtil.buildPostRequest(body, GatewayConstConfig.HTTP_PREFIX + GeneralConfig.AUTH_TOKEN_URI, header);
         try {
-            Response resp =  OkHttpUtil.requestExecute(request);
-            return resp.message();
+            Response resp = OkHttpUtil.requestExecute(request);
+            Map items = OkHttpUtil.getDataFromResp(resp);
+            if (items.containsKey("success") && !((boolean) items.get("success"))) {
+                return new ErrorResponse.Builder(new AuthenFailedException((String) items.get("message"))).build().toJson();
+            }
+
+            return new SuccessResponse.Builder()
+                    .addItems(items)
+                    .build()
+                    .toJson();
         } catch (Exception e) {
             return new ErrorResponse.Builder(new InternalErrorException()).build().toJson();
         }
