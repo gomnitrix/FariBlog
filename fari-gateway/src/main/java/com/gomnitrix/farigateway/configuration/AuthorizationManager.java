@@ -63,6 +63,7 @@ public class AuthorizationManager implements ReactiveAuthorizationManager<Author
             Map<String, Object> claims = jwt.getClaims();
             ServerHttpRequest request = exchange.getRequest().mutate()
                     .headers(httpHeaders -> {
+                        // 将jwt中的信息放入http头部中
                         httpHeaders.add("username", claims.get("user_name").toString());
                         httpHeaders.add("userId", claims.get("userId").toString());
                         //TODO 后续需要添加别的jwt里的项可以在这里添加，目前还有两个可能有用的字段：role, client_id

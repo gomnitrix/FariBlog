@@ -1,7 +1,6 @@
 package com.gomnitrix.farigateway.controller;
 
 import com.gomnitrix.commons.Response.ErrorResponse;
-import com.gomnitrix.commons.Response.SuccessResponse;
 import com.gomnitrix.commons.configuration.GatewayConstConfig;
 import com.gomnitrix.commons.configuration.GeneralConfig;
 import com.gomnitrix.commons.exception.InternalErrorException;
@@ -73,10 +72,7 @@ public class AuthClientController {
         Request request = OkHttpUtil.buildPostRequest(body, GatewayConstConfig.HTTP_PREFIX + GeneralConfig.AUTH_TOKEN_URI, header);
         try {
             Response resp =  OkHttpUtil.requestExecute(request);
-            return new SuccessResponse.Builder()
-                                    .addItems(OkHttpUtil.getDataFromResp(resp))
-                                    .build()
-                                    .toJson();
+            return resp.message();
         } catch (Exception e) {
             return new ErrorResponse.Builder(new InternalErrorException()).build().toJson();
         }
