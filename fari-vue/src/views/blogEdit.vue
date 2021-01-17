@@ -1,36 +1,63 @@
 <template>
-  <div>
-    <el-drawer
-      ref="drawer"
-      :before-close="handleClose"
-      direction="ltr"
-      custom-class="demo-drawer"
+  <div
+    class="wrapper"
+    style="overflow: auto;width: 100%;height: 100%;"
+  >
+    <FariFloatingBtn
+      :display="true"
+      right="13.333%"
+      :icon="btnIcon"
+      @clicked="post"
+    />
+    <!-- <el-backtop
+      target=".wrapper"
+      :visibility-height="0"
+      :bottom="200"
+      style="right:13.333%;"
+      @click="submit()"
     >
-      <div class="demo-drawer__content">
-        <el-form
-          :rules="blogInfoRules"
-          :model="blogInfoForm"
-        >
-          <el-form-item
-            label="Blog Title"
-            :label-width="formLabelWidth"
+      <el-button
+        id="postBtn"
+        size="medium"
+        type="primary"
+        :icon="btnIcon"
+        circle
+      />
+    </el-backtop> -->
+    <el-col
+      :span="16"
+      :offset="4"
+    >
+      <div style="margin-left:20%; margin-right:20%;">
+        <el-row>
+          <el-form
+            ref="blogInfoForm"
+            :rules="blogInfoRules"
+            :model="blogInfoForm"
+            label-position="right"
           >
-            <el-input
-              v-model="form.title"
-              autocomplete="off"
-            />
-          </el-form-item>
-          <el-form-item
-            label="Blog Summary"
-            :label-width="formLabelWidth"
-          >
-            <el-input
-              v-model="form.summary"
-              autocomplete="off"
-              placeholder="请输入博客简介，字数不超过150字。"
-            />
-          </el-form-item>
-          <!-- <el-form-item
+            <el-form-item
+              label="Title"
+              prop="title"
+            >
+              <el-input
+                v-model="blogInfoForm.title"
+                autocomplete="off"
+              />
+            </el-form-item>
+            <el-form-item
+              label="Summary"
+              prop="summary"
+            >
+              <el-input
+                v-model="blogInfoForm.summary"
+                type="textarea"
+                :rows="2"
+                autocomplete="off"
+                placeholder="请输入博客简介，字数不超过150字。"
+              />
+            </el-form-item>
+            <!-- <el-form-item
             label="Blog Summary"
             :label-width="formLabelWidth"
           >
@@ -48,32 +75,28 @@
               />
             </el-select>
           </el-form-item> -->
-        </el-form>
-        <div class="demo-drawer__footer">
-          <el-button @click="cancelForm">
-            取 消
-          </el-button>
-          <el-button
-            type="primary"
-            :loading="loading"
-            @click="$refs.drawer.closeDrawer()"
-          >
-            {{ loading ? '提交中 ...' : '发 布' }}
-          </el-button>
-        </div>
+          </el-form>
+        </el-row>
+        <el-row>
+          <div
+            id="mdEditor"
+            class="vditor"
+          />
+        </el-row>
       </div>
-    </el-drawer>
-    <div
-      id="mdEditor"
-      class="vditor"
-    />
+    </el-col>
   </div>
 </template>
 
 <script>
 import Vditor from 'vditor'
+import FariFloatingBtn from '@c/FariFloatingBtn/floatingBtn.vue'
+import { postBlog } from '@/api/blogs'
 export default {
   name: 'FariEditor',
+  components: {
+    FariFloatingBtn
+  },
   data () {
     return {
       editor: '',
@@ -94,7 +117,10 @@ export default {
           { max: 150, message: '密码长度不能大于 150 个字符', trigger: 'blur' }
         ]
       },
-      loading: false
+      loading: false,
+      btnIcon: 'el-icon-s-promotion',
+      dialog: true,
+      timer: null
     }
   },
   mounted () {
@@ -105,7 +131,7 @@ export default {
       },
       placeholder: this.welcome,
       minHeight: 1000,
-      width: '50%',
+      width: '100%',
       outline: true, // 大纲模式
       counter: {
         enable: 102400 // 计数，提示角标问题
@@ -135,17 +161,6 @@ export default {
         'insert-after',
         '|',
         'upload',
-        {
-          name: 'submit',
-          tipPosition: 's',
-          tip: '提交博客',
-          className: 'right',
-          icon: '<svg t="1610721877054" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="706" width="200" height="200"><path d="M636.096 1016.96c-26.624 0-51.2-14.336-65.536-36.864l-204.8-329.728-327.68-200.704C13.44 433.28-2.88 404.608 1.216 373.888c4.096-30.72 22.528-55.296 51.2-65.536L902.336 5.248c28.672-10.24 61.44-2.048 83.968 20.48 22.528 20.48 30.72 53.248 20.48 83.968l-296.96 854.016c-10.24 28.672-34.816 49.152-65.536 51.2-2.048 2.048-6.144 2.048-8.192 2.048z m-204.8-413.696l202.752 327.68L928.96 85.12l-2.048-2.048-839.68 301.056 337.92 206.848 6.144 12.288c0-2.048 0-2.048 0 0z" p-id="707"></path><path d="M928.96 25.984l58.24 57.664-564.992 570.368-58.24-57.6z" p-id="708"></path></svg>',
-          click () {
-            self.submit()
-          }
-        },
-        'record',
         'table',
         '|',
         'undo',
@@ -186,7 +201,7 @@ export default {
     showAbout () {
       this.$message({
         type: 'info',
-        message: '这是基于Vditor实现的Web端MarkDown工具<br/>🎊欢迎使用~<br/>'
+        message: '这是基于Vditor实现的Web端MarkDown工具，🎊欢迎使用~'
       })
     },
     submit () {
@@ -194,8 +209,41 @@ export default {
       console.log('html content: ')
       console.log(htmlContent)
     },
-    post () {
-
+    post: function () {
+      this.$refs.blogInfoForm.validate((valid) => {
+        if (!valid) {
+          console.log('表单校验失败。')
+        } else {
+          this.loading = true
+          this.btnIcon = 'el-icon-loading'
+          var params = {}
+          params.title = this.blogInfoForm.title
+          params.summary = this.blogInfoForm.summary
+          params.content = this.editor.getHTML()
+          params.author = this.$route.params.user
+          params.authorId = this.$route.params.userId
+          postBlog(params).then(response => {
+            if (response.code === this.$ECode.SUCCESS) {
+              this.$message({
+                type: 'success',
+                message: response.message
+              })
+              setTimeout(function () {
+                console.log(process.env.VUE_APP_WEB_API + `/index/${this.$route.params.userId}`)
+                location.replace(process.env.VUE_APP_WEB_API + `/index/${this.$route.params.userId}`)
+              }, 2000)
+            } else {
+              this.$message({
+                type: 'error',
+                message: response.message
+              })
+            }
+            this.loading = false
+            this.btnIcon = 'el-icon-loading'
+          })
+        }
+      }
+      )
     }
     // async open_md () {
     //   const filePath = await dialog.open({
@@ -220,4 +268,7 @@ export default {
 </script>
 <style scoped>
 @import "~vditor/dist/index.css";
+#postBtn {
+   font-size: 50px;
+}
 </style>

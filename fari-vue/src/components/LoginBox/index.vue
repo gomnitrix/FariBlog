@@ -110,10 +110,15 @@ export default {
               // 这里先暂时设置过期时间为1天(实际上还是取决于后端颁发的jwt)
               setCookie('access_token', response.data.access_token, 1)
               setCookie('refresh_token', response.data.refresh_token, 1)
-              setTimeout(function () {
-                console.log(process.env.VUE_APP_WEB_API + `/index/${response.data.userId}`)
-                location.replace(process.env.VUE_APP_WEB_API + `/index/${response.data.userId}`)
-              }, 2000)
+              setTimeout(() => {
+                this.$router.push({
+                  name: 'Home',
+                  params: {
+                    user: this.loginForm.userName,
+                    userId: response.data.userId.toString()
+                  }
+                })
+              }, 1500)
             } else {
               this.$message({
                 type: 'error',

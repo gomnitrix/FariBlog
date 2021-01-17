@@ -21,17 +21,19 @@
         hide-on-single-page
       />
     </el-row>
-    <el-backtop />
+    <BackTop />
   </div>
 </template>
 
 <script>
 import BlogCard from '@c/BlogCard/blogCard.vue'
+import BackTop from '@c/FariFloatingBtn/backTop.vue'
 import { getBlogsInfo, getPagesNum } from '@/api/blogs'
 export default {
   name: 'Home',
   components: {
-    BlogCard
+    BlogCard,
+    BackTop
   },
   data () {
     return {

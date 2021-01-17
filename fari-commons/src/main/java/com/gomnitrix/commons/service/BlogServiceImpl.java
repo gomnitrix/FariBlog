@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.gomnitrix.commons.dto.BlogDto;
 import com.gomnitrix.commons.entity.Blog;
 import com.gomnitrix.commons.exception.ResourceNotFoundException;
+import com.gomnitrix.commons.mapper.BlogConvertMapper;
 import com.gomnitrix.commons.mapper.BlogMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,8 +61,8 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog> implements Bl
     }
 
     @Override
-    public long addBlog(long userID, BlogDto blog) {
-        Blog newBlog = blog.toBlog();
+    public long addBlog(long userID, BlogDto blogDto) {
+        Blog newBlog = BlogConvertMapper.INSTANCE.fromBlogDto(blogDto);
         newBlog.setUid(uuidService.getUid());
         blogMapper.insert(newBlog);
         return newBlog.getUid();

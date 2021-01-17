@@ -15,3 +15,15 @@ export function getPagesNum (pageSize) {
     method: 'get'
   })
 }
+
+export function postBlog (params) {
+  var postUrl = process.env.VUE_APP_SERVER_API + '/fariWeb/index/blog'
+  console.log('env: ' + process.env.NODE_ENV)
+  console.log('WEB_API: ' + process.env.VUE_APP_SERVER_API)
+  console.log('post blog url: ' + postUrl)
+  return request({
+    url: postUrl,
+    method: 'post',
+    data: params
+  })
+}

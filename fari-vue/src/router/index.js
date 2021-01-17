@@ -4,6 +4,7 @@ import Index from '@/views/index'
 import Home from '@/views/home'
 import Main from '@/views/main'
 import FariEditor from '@/views/blogEdit'
+import UserMain from '@/views/userMain'
 
 Vue.use(Router)
 
@@ -12,9 +13,16 @@ const routes = [
     path: '/',
     component: Main,
     children: [
-      { path: '', component: Index },
-      { path: '/index/:userId', component: Home },
-      { path: '/blog/editor', component: FariEditor }
+      { path: 'fariblog', component: Index },
+      {
+        path: 'user/:userId',
+        name: 'User',
+        component: UserMain,
+        children: [
+          { path: 'home', name: 'Home', component: Home },
+          { path: 'editor', name: 'Editor', component: FariEditor }
+        ]
+      }
     ]
   }
 ]
