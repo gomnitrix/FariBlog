@@ -120,11 +120,15 @@ export default {
       loading: false,
       btnIcon: 'el-icon-s-promotion',
       dialog: true,
-      timer: null
+      timer: null,
+      userName: null,
+      userId: ''
     }
   },
   mounted () {
     const self = this
+    this.userName = this.$route.params.user
+    this.userId = this.$route.params.userId
     this.editor = new Vditor('mdEditor', {
       cache: {
         enable: false
@@ -228,9 +232,14 @@ export default {
                 type: 'success',
                 message: response.message
               })
-              setTimeout(function () {
-                console.log(process.env.VUE_APP_WEB_API + `/index/${this.$route.params.userId}`)
-                location.replace(process.env.VUE_APP_WEB_API + `/index/${this.$route.params.userId}`)
+              setTimeout(() => {
+                this.$router.push({
+                  name: 'Home',
+                  params: {
+                    user: this.userName,
+                    userId: this.userId
+                  }
+                })
               }, 2000)
             } else {
               this.$message({

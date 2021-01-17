@@ -1,11 +1,13 @@
 package com.gomnitrix.commons.dto;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Data
+@NoArgsConstructor
 public class BlogDto {
     /**
      * 唯一uid

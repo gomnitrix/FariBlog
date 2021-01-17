@@ -5,7 +5,7 @@ import com.gomnitrix.commons.entity.Blog;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface BlogConvertMapper {
     BlogConvertMapper INSTANCE = Mappers.getMapper(BlogConvertMapper.class);
 
