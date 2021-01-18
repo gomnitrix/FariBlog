@@ -23,13 +23,15 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog> implements Bl
     @Autowired
     BlogMapper blogMapper;
 
+    BlogConvertMapper converter = BlogConvertMapper.INSTANCE;
+
     @Override
-    public Blog getBlogByUid(long uid) {
+    public BlogDto getBlogByUid(long uid) {
         Blog blog = blogMapper.selectById(uid);
         if(blog == null){
             throw new ResourceNotFoundException("The requested blog does not exist");
         }
-        return blog;
+        return converter.toBlogDto(blog);
     }
 
     @Override

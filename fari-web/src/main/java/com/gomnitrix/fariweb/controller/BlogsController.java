@@ -56,4 +56,10 @@ public class BlogsController {
                 .addItem("pages", blogService.getPagesNum(Long.parseLong(userId), pageSize))
                 .build().toJson();
     }
+
+    @GetMapping("/article/{blogId}")
+    public String getArticle(@PathVariable int blogId){
+        BlogDto blogDto = blogService.getBlogByUid(blogId);
+        return new SuccessResponse.Builder().addItem("blog", blogDto).build().toJson();
+    }
 }

@@ -11,7 +11,7 @@ public interface BlogService {
      * @param uid
      * @return
      */
-    Blog getBlogByUid(long uid);
+    BlogDto getBlogByUid(long uid);
 
     long getPagesNum(long userID, int pageSize);
 
