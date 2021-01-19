@@ -34,9 +34,7 @@ service.interceptors.response.use(
     const res = response.data
     console.log('response data: \n')
     console.log(res)
-    if (res.code === 0 || res.code === 1) {
-      return res
-    } else if (res.code === 401 || res.code === 400) {
+    if (res.code === 401 || res.code === 400) {
       console.log('返回错误内容', res)
       router.push('404')
       return res
@@ -47,8 +45,11 @@ service.interceptors.response.use(
       router.push('502')
       return Promise.reject('error')
     } else {
-      return Promise.reject('error')
+      return res
     }
+    // else {
+    //   return Promise.reject('error')
+    // }
   },
   error => {
     // 出现网络超时
