@@ -4,14 +4,19 @@
     style="padding: '30px 0px 0px 0px'; border-radius: 10px; margin-bottom:50px;"
     shadow="hover"
   >
-    <img
-      :src="fariImgSrc"
-      class="image"
+    <div
+      style="cursor:pointer;"
+      @click="getBlog"
     >
-    <div style="padding: 10px 60px 60px 60px;">
-      <h2><strong>{{ blogInfo.title }}</strong></h2>
-      <p> {{ blogInfo.summary }} </p>
-      <time class="time"> Posted {{ getDate() }}</time>
+      <img
+        :src="fariImgSrc"
+        class="image"
+      >
+      <div style="padding: 10px 60px 60px 60px;">
+        <h2><strong>{{ blogInfo.title }}</strong></h2>
+        <p> {{ blogInfo.summary }} </p>
+        <time class="time"> Posted {{ getDate() }}</time>
+      </div>
     </div>
   </el-card>
 </template>
@@ -26,14 +31,17 @@ export default {
         return {
           title: 'title',
           summary: 'description',
-          createTime: 'postTime'
+          createTime: 'postTime',
+          uid: 'blogId'
         }
       }
     }
   },
   data () {
     return {
-      fariImgSrc: require('@/assets/FariBlog.png')
+      fariImgSrc: require('@/assets/FariBlog.png'),
+      userName: this.$route.params.user,
+      userId: this.$route.params.userId
     }
   },
   methods: {
@@ -43,6 +51,16 @@ export default {
       var month = postDate.date.month
       var day = postDate.date.day
       return `${year}.${month}.${day}`
+    },
+    getBlog () {
+      this.$router.push({
+        name: 'Blog',
+        params: {
+          user: this.userName,
+          userId: this.userId,
+          blogId: this.blogInfo.uid
+        }
+      })
     }
   }
 }

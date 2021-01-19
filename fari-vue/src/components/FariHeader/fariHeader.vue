@@ -10,17 +10,18 @@
         :offset="21"
       >
         <a
-          style="margin-right: 25px;"
+          id="newBlogBtn"
+          style="margin-right:25px;cursor:pointer;"
           @click="loadEditor"
         ><i
           style="font-size:24px;font-weight:600;"
-          class="el-icon-plus"
+          class="el-icon-plus dyn"
         /></a>
-
-        <i
-          style="font-size:24px;font-weight:600;"
-          class="el-icon-moon"
-        />
+        <a style="cursor:pointer;">
+          <i
+            style="font-size:24px;font-weight:600;"
+            class="el-icon-moon dyn"
+          /></a>
       </el-col>
     </el-row>
   </div>
@@ -64,3 +65,22 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+  .dyn:hover{
+    font-size:30px !important;
+    transition: font-size 0.5s;
+  }
+  .dyn{
+    font-size:24px !important;
+    transition: font-size 0.3s;
+  }
+  #newBlogBtn:hover{
+    margin-right:19px !important;
+    transition: margin-right 0.5s;
+  }
+  #newBlogBtn{
+    margin-right:25px !important;
+    transition: margin-right 0.3s;
+  }
+</style>

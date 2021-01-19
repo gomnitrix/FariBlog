@@ -69,7 +69,7 @@ export default {
             message: response.message
           })
           setTimeout(function () {
-            location.replace(process.env.VUE_APP_WEB_API)
+            location.replace(process.env.VUE_APP_WEB_API + '/fariblog')
           }, 2000)
         }
       })

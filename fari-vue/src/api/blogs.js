@@ -27,3 +27,11 @@ export function postBlog (params) {
     data: params
   })
 }
+
+export function getBlog (blogId) {
+  var blogUrl = process.env.VUE_APP_SERVER_API + `/fariWeb/index/article/${blogId}`
+  return request({
+    url: blogUrl,
+    method: 'get'
+  })
+}

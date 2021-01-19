@@ -58,7 +58,7 @@ public class BlogsController {
     }
 
     @GetMapping("/article/{blogId}")
-    public String getArticle(@PathVariable int blogId){
+    public String getArticle(@PathVariable long blogId){
         BlogDto blogDto = blogService.getBlogByUid(blogId);
         return new SuccessResponse.Builder().addItem("blog", blogDto).build().toJson();
     }
