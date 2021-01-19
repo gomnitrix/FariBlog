@@ -1,5 +1,7 @@
 <template>
-  <div>
+  <div
+    style="overflow:auto;"
+  >
     <el-row
       v-for="(blog, index) in blogs"
       :key="index"
@@ -21,7 +23,9 @@
         hide-on-single-page
       />
     </el-row>
-    <BackTop />
+    <BackTop
+      :parent-num="2"
+    />
   </div>
 </template>
 

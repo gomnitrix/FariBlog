@@ -8,6 +8,7 @@
       type="primary"
       :icon="icon"
       circle
+      style="background-color: #fff;color: #409eff;"
       @click="backtop"
     />
   </div>
@@ -19,15 +20,15 @@ export default {
   props: {
     length: {
       type: Number,
-      default: 200
+      default: 100
     },
     bottom: {
       type: Number,
-      default: 50
+      default: 60
     },
     right: {
       type: Number,
-      default: 50
+      default: 60
     },
     icon: {
       type: String,
@@ -36,30 +37,49 @@ export default {
     speed: {
       type: Number,
       default: 100
+    },
+    parentNum: {
+      type: Number,
+      default: 1
     }
   },
   data () {
     return {
-      show: false
+      show: false,
+      scrollEl: null
     }
   },
   mounted () {
     var btn = this.$refs.btn
     btn.style.right = this.right + 'px'
     btn.style.bottom = this.bottom + 'px'
-    this.$refs.btn.parentElement.onmousewheel = this.isShow
+    this.getScrollEl()
+    this.scrollEl.onmousewheel = this.isShow
   },
   methods: {
+    getScrollEl () {
+      var btn = this.$refs.btn
+      var currParent = btn
+      for (var i = 0; i < this.parentNum; i++) {
+        currParent = currParent.parentElement
+      }
+      this.scrollEl = currParent
+    },
     backtop () {
       this.show = false
-      var parent = this.$refs.btn.parentElement
+      var parent = this.scrollEl
       parent.scrollTop -= this.speed
       if (parent.scrollTop > 0) {
         window.requestAnimationFrame(this.backtop)
       }
     },
     isShow () {
-      if (this.$refs.btn.parentElement.scrollTop > this.length) { this.show = true } else this.show = false
+      var scrollDom = this.scrollEl
+      if (scrollDom.scrollTop > this.length) {
+        this.show = true
+      } else {
+        this.show = false
+      }
     }
   }
 }
@@ -68,7 +88,10 @@ export default {
 <style>
 .backtop {
   position: fixed;
-  right: 50px;
-  bottom: 50px;
+  right: 60px;
+  bottom: 60px;
+}
+.el-button:hover{
+  background-color: #f2f6fc !important;
 }
 </style>
