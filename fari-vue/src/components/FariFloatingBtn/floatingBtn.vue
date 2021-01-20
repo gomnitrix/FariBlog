@@ -5,8 +5,9 @@
   >
     <el-button
       v-show="show"
-      type="primary"
+      id="floatBtn"
       :icon="icon"
+      :loading="loading"
       circle
       :style="btnSize"
       @click="handle"
@@ -29,6 +30,10 @@ export default {
     icon: {
       type: String,
       default: 'el-icon-top'
+    },
+    loading: {
+      type: Boolean,
+      default: false
     },
     size: {
       type: Number,
@@ -58,5 +63,15 @@ export default {
 <style>
 .backtop {
   position: fixed;
+}
+#floatBtn{
+  background-color: #409eff !important;
+  color: #ffffff !important;
+  transition: background-color 1s;
+}
+#floatBtn:hover{
+  background-color: #f2f6fc !important;
+  color: #409eff !important;
+  transition: color, background-color 0.6s;
 }
 </style>

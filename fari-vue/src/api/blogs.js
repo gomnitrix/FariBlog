@@ -18,11 +18,17 @@ export function getPagesNum (pageSize) {
 
 export function postBlog (params) {
   var postUrl = process.env.VUE_APP_SERVER_API + '/fariWeb/index/blog'
-  console.log('env: ' + process.env.NODE_ENV)
-  console.log('WEB_API: ' + process.env.VUE_APP_SERVER_API)
-  console.log('post blog url: ' + postUrl)
   return request({
     url: postUrl,
+    method: 'put',
+    data: params
+  })
+}
+
+export function updateBlog (params) {
+  var updateUrl = process.env.VUE_APP_SERVER_API + '/fariWeb/index/blog/'
+  return request({
+    url: updateUrl,
     method: 'post',
     data: params
   })
@@ -33,5 +39,13 @@ export function getBlog (blogId) {
   return request({
     url: blogUrl,
     method: 'get'
+  })
+}
+
+export function deleteBlog (blogId) {
+  var deleteBlogUrl = process.env.VUE_APP_SERVER_API + `/fariWeb/index/blog/${blogId}`
+  return request({
+    url: deleteBlogUrl,
+    method: 'delete'
   })
 }

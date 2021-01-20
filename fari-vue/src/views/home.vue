@@ -2,6 +2,7 @@
   <div
     style="overflow:auto;"
   >
+    <UserInfo :user-name="userName" />
     <el-row
       v-for="(blog, index) in blogs"
       :key="index"
@@ -32,19 +33,22 @@
 <script>
 import BlogCard from '@c/BlogCard/blogCard.vue'
 import BackTop from '@c/FariFloatingBtn/backTop.vue'
+import UserInfo from '@c/UserInfo/userInfo.vue'
 import { getBlogsInfo, getPagesNum } from '@/api/blogs'
 export default {
   name: 'Home',
   components: {
     BlogCard,
-    BackTop
+    BackTop,
+    UserInfo
   },
   data () {
     return {
       blogs: [],
       pageSize: 8,
       pageIndex: 1,
-      pageNum: 1
+      pageNum: 1,
+      userName: this.$route.params.user
     }
   },
   mounted: function () {

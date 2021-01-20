@@ -102,7 +102,7 @@ export default {
           clearCookie('access_token')
           clearCookie('refresh_token')
           login(params).then(response => {
-            if (response.code === this.$ECode.SUCCESS) {
+            if (response.success === true) {
               this.$message({
                 type: 'success',
                 message: response.message

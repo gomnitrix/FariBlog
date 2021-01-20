@@ -24,11 +24,11 @@ export default {
     },
     bottom: {
       type: Number,
-      default: 60
+      default: 80
     },
     right: {
       type: Number,
-      default: 60
+      default: 80
     },
     icon: {
       type: String,

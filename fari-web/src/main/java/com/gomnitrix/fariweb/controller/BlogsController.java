@@ -4,6 +4,7 @@ import com.gomnitrix.commons.Response.SuccessResponse;
 import com.gomnitrix.commons.dto.BlogDto;
 import com.gomnitrix.commons.entity.Blog;
 import com.gomnitrix.commons.exception.InvalidParameterException;
+import com.gomnitrix.commons.exception.PermissionDeniedException;
 import com.gomnitrix.commons.service.BlogService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,10 +38,17 @@ public class BlogsController {
         return new SuccessResponse.Builder().addItem("blogs", blogs).build().toJson();
     }
 
+    @GetMapping("/pageNum/{pageSize}")
+    public String getPageNum(@PathVariable int pageSize, @RequestHeader("userId") String userId) {
+        return new SuccessResponse.Builder()
+                .addItem("pages", blogService.getPagesNum(Long.parseLong(userId), pageSize))
+                .build().toJson();
+    }
+
     /**
      * 为当前jwt代表的登录用户插入一条博客
      */
-    @PostMapping("/blog")
+    @PutMapping("/blog")
     public String addBlogs(@RequestBody @Validated BlogDto blogDto, BindingResult errors, @RequestHeader("userId") String userId) {
         if (errors.hasErrors()) {
             FieldError error = errors.getFieldError();
@@ -50,16 +58,31 @@ public class BlogsController {
         return new SuccessResponse.Builder().addItem("blogID", blogUid).build().toJson();
     }
 
-    @GetMapping("/pageNum/{pageSize}")
-    public String getPageNum(@PathVariable int pageSize, @RequestHeader("userId") String userId) {
-        return new SuccessResponse.Builder()
-                .addItem("pages", blogService.getPagesNum(Long.parseLong(userId), pageSize))
-                .build().toJson();
+    @PostMapping("/blog")
+    public String updateBlog(@RequestBody @Validated BlogDto blogDto, BindingResult errors, @RequestHeader("userId") String userId) {
+        if (errors.hasErrors()) {
+            FieldError error = errors.getFieldError();
+            throw new InvalidParameterException(Objects.requireNonNull(error).getDefaultMessage());
+        }
+        if(!blogService.isMatchUser(Long.parseLong(userId), blogDto.getUid())){
+            throw new PermissionDeniedException("Update operation failed, the blog does not belong to your account.");
+        }
+        blogService.updateBlog(blogDto);
+        return new SuccessResponse.Builder().build().toJson();
     }
 
     @GetMapping("/article/{blogId}")
     public String getArticle(@PathVariable long blogId){
         BlogDto blogDto = blogService.getBlogByUid(blogId);
         return new SuccessResponse.Builder().addItem("blog", blogDto).build().toJson();
+    }
+
+    @DeleteMapping("/blog/{blogId}")
+    public String deleteBlog(@PathVariable long blogId, @RequestHeader("userId") String userId){
+        if(!blogService.isMatchUser(Long.parseLong(userId), blogId)){
+            throw new PermissionDeniedException("Delete operation failed, the blog does not belong to your account.");
+        }
+        blogService.deleteBlog(blogId);
+        return new SuccessResponse.Builder().build().toJson();
     }
 }

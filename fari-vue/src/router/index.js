@@ -22,7 +22,8 @@ const routes = [
         children: [
           { path: 'home', name: 'Home', component: Home },
           { path: 'editor', name: 'Editor', component: FariEditor },
-          { path: 'blog/:blogId', name: 'Blog', component: BlogPage }
+          { path: 'blog/:blogId', name: 'Blog', component: BlogPage },
+          { path: 'editor/:blogId', name: 'Updator', component: FariEditor }
         ]
       }
     ]

@@ -7,23 +7,9 @@
       :display="true"
       right="13.333%"
       :icon="btnIcon"
-      @clicked="post"
+      :loading="loading"
+      @clicked="method"
     />
-    <!-- <el-backtop
-      target=".wrapper"
-      :visibility-height="0"
-      :bottom="200"
-      style="right:13.333%;"
-      @click="submit()"
-    >
-      <el-button
-        id="postBtn"
-        size="medium"
-        type="primary"
-        :icon="btnIcon"
-        circle
-      />
-    </el-backtop> -->
     <el-col
       :span="16"
       :offset="4"
@@ -91,7 +77,7 @@
 <script>
 import Vditor from 'vditor'
 import FariFloatingBtn from '@c/FariFloatingBtn/floatingBtn.vue'
-import { postBlog } from '@/api/blogs'
+import { postBlog, updateBlog, getBlog } from '@/api/blogs'
 export default {
   name: 'FariEditor',
   components: {
@@ -122,7 +108,8 @@ export default {
       dialog: true,
       timer: null,
       userName: null,
-      userId: ''
+      userId: '',
+      method: this.post
     }
   },
   mounted () {
@@ -200,6 +187,7 @@ export default {
         // this.vditor.setValue('# 🎉️ Welcome to use Tauri Vditor!')
       }
     })
+    self.checkIfUpdate()
   },
   methods: {
     showAbout () {
@@ -213,19 +201,42 @@ export default {
       console.log('html content: ')
       console.log(htmlContent)
     },
+    checkIfUpdate () {
+      if (this.$route.params.blogId === null) return
+      console.log('UPDATE!')
+      var blogId = this.$route.params.blogId
+      this.method = this.update
+      getBlog(blogId).then(response => {
+        if (response.code === this.$ECode.SUCCESS) {
+          var blog = response.data.blog
+          this.blogInfoForm.title = blog.title
+          this.blogInfoForm.summary = blog.summary
+          var content = this.editor.html2md(blog.content)
+          this.editor.setValue(content)
+        } else {
+          this.$message({
+            type: 'error',
+            message: response.message
+          })
+        }
+      })
+    },
+    getParams () {
+      var params = {}
+      params.title = this.blogInfoForm.title
+      params.summary = this.blogInfoForm.summary
+      params.content = this.editor.getHTML()
+      params.author = this.$route.params.user
+      params.authorId = this.$route.params.userId
+      return params
+    },
     post: function () {
       this.$refs.blogInfoForm.validate((valid) => {
         if (!valid) {
           console.log('表单校验失败。')
         } else {
           this.loading = true
-          this.btnIcon = 'el-icon-loading'
-          var params = {}
-          params.title = this.blogInfoForm.title
-          params.summary = this.blogInfoForm.summary
-          params.content = this.editor.getHTML()
-          params.author = this.$route.params.user
-          params.authorId = this.$route.params.userId
+          var params = this.getParams()
           postBlog(params).then(response => {
             if (response.code === this.$ECode.SUCCESS) {
               this.$message({
@@ -248,7 +259,41 @@ export default {
               })
             }
             this.loading = false
-            this.btnIcon = 'el-icon-loading'
+          })
+        }
+      }
+      )
+    },
+    update: function () {
+      this.$refs.blogInfoForm.validate((valid) => {
+        if (!valid) {
+          console.log('表单校验失败。')
+        } else {
+          this.loading = true
+          var params = this.getParams()
+          params.uid = this.$route.params.blogId
+          updateBlog(params).then(response => {
+            if (response.code === this.$ECode.SUCCESS) {
+              this.$message({
+                type: 'success',
+                message: response.message
+              })
+              setTimeout(() => {
+                this.$router.push({
+                  name: 'Home',
+                  params: {
+                    user: this.userName,
+                    userId: this.userId
+                  }
+                })
+              }, 2000)
+            } else {
+              this.$message({
+                type: 'error',
+                message: response.message
+              })
+            }
+            this.loading = false
           })
         }
       }

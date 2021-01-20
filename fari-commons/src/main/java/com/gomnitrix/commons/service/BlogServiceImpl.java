@@ -29,7 +29,7 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog> implements Bl
     public BlogDto getBlogByUid(long uid) {
         Blog blog = blogMapper.selectById(uid);
         if(blog == null){
-            throw new ResourceNotFoundException("The requested blog does not exist");
+            throw new ResourceNotFoundException("The requested blog does not exist.");
         }
         return converter.toBlogDto(blog);
     }
@@ -68,5 +68,28 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog> implements Bl
         newBlog.setUid(uuidService.getUid());
         blogMapper.insert(newBlog);
         return newBlog.getUid();
+    }
+
+    @Override
+    public void deleteBlog(long blogId) {
+        int result = blogMapper.deleteById(blogId);
+        if (result != 1){
+            throw new ResourceNotFoundException("Delete operation failed, the blog is not exist.");
+        }
+    }
+
+    @Override
+    public boolean isMatchUser(long userId, long blogId) {
+        BlogDto blogDto = getBlogByUid(blogId);
+        return blogDto.getAuthorId().equals(userId);
+    }
+
+    @Override
+    public void updateBlog(BlogDto blogDto) {
+        Blog blog = converter.fromBlogDto(blogDto);
+        int result = blogMapper.updateById(blog);
+        if (result != 1){
+            throw new ResourceNotFoundException("Update operation failed, the blog is not exist.");
+        }
     }
 }

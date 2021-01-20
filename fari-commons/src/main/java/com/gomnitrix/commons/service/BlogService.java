@@ -40,4 +40,25 @@ public interface BlogService {
      * @return
      */
     long addBlog(long userID, BlogDto blog);
+
+    /**
+     * 更新一篇现有的博客
+     * @param blogDto
+     */
+    void updateBlog(BlogDto blogDto);
+
+    /**
+     * 删除指定uid对应的博客
+     * @param blogId
+     * @return
+     */
+    void deleteBlog(long blogId);
+
+    /**
+     * 判断blogId对应的博客是否属于userId对应的用户
+     * @param userId
+     * @param blogId
+     * @return
+     */
+    boolean isMatchUser(long userId, long blogId);
 }
