@@ -1,0 +1,16 @@
+server:
+  port: 6001
+spring:
+  application:
+    name: fari-auth
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+        username: nacos
+        password: nacospassword
+  datasource:
+    druid:
+      url: jdbc:mysql://localhost:3306/fariblog
+      username: omnitrix
+      password: dbpassword
