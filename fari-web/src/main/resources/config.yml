@@ -1,16 +1,23 @@
-server:
-  port: 6003
-spring:
-  application:
-    name: fari-web
-  cloud:
-    nacos:
-      discovery:
-        server-addr: localhost:8848
-        username: nacos
-        password: nacospassword
-  datasource:
-    druid:
-      url: jdbc:mysql://localhost:3306/fariblog
-      username: omnitrix
-      password: dbpassword
+#server:
+#  port: 6003
+#qiniu:
+#  accessKey: accessKey
+#  secretKey: secretKey
+#  # 对象储存
+#  bucket: omnitrix-qiniu # 空间名称
+#  zone: huanan # 存储区域
+#  domain: xxxx.xxxx.clouddn.com
+#spring:
+#  application:
+#    name: fari-web
+#  cloud:
+#    nacos:
+#      discovery:
+#        server-addr: localhost:8848
+#        username: nacos
+#        password: nacospassword
+#  datasource:
+#    druid:
+#      url: jdbc:mysql://localhost:3306/fariblog
+#      username: omnitrix
+#      password: dbpassword

@@ -9,7 +9,7 @@
 
 > A micro-service based front-end & back-end separated blog system.
 
-<img src="/Users/gaobowei/Desktop/截屏2021-01-21 下午6.37.30.png" style="zoom:80%;" />
+<img src="http://qnahkr248.hn-bkt.clouddn.com/fariblog/image/logo_white.png" style="zoom:80%;" />
 
 ## Table of Contents
 

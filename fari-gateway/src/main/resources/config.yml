@@ -1,61 +1,61 @@
-server:
-  port: 6002
-  error:
-    whitelabel:
-      enabled: false
-
-security:
-  oauth2:
-    client:
-      client-id: fari-gateway
-      client-secret: fari-gateway-20201030
-      user-authorization-uri: http://localhost:6002/fari-auth/oauth/authorize
-      access-token-uri: http://localhost:6002/fari-auth/oauth/token
-
-fari-gateway:
-  secure:
-    white-list:
-      urls:
-        - "/fariAuth/**"
-        - "/fariblog/login"
-        - "/fariGateway/code"
-        -
-spring:
-  main:
-    allow-bean-definition-overriding: true
-  application:
-    name: fari-gateway
-  datasource:
-    druid:
-      url: jdbc:mysql://localhost:3306/fariblog
-      username: omnitrix
-      password: dbpassword
-  security:
-    oauth2:
-      resourceserver:
-        jwt:
-          jwk-set-uri: http://localhost:${server.port}/fariAuth/rsa/publicKey
-  cloud:
-    nacos:
-      discovery:
-        server-addr: localhost:8848
-        username: nacos
-        password: nacospassword
-    gateway:
-      discovery:
-        locator:
-          enabled: true
-          lower-case-service-id: true
-      routes:
-        - id: fariAuthRouter
-          uri: lb://fari-auth
-          predicates:
-            - Path=/fariAuth/**
-          filters:
-            - StripPrefix=1
-        - id: fariWebRouter
-          uri: lb://fari-web
-          predicates:
-            - Path=/fariWeb/**
-          filters:
-            - StripPrefix=1
+#server:
+#  port: 6002
+#  error:
+#    whitelabel:
+#      enabled: false
+#
+#security:
+#  oauth2:
+#    client:
+#      client-id: fari-gateway
+#      client-secret: fari-gateway-20201030
+#      user-authorization-uri: http://localhost:6002/fari-auth/oauth/authorize
+#      access-token-uri: http://localhost:6002/fari-auth/oauth/token
+#
+#fari-gateway:
+#  secure:
+#    white-list:
+#      urls:
+#        - "/fariAuth/**"
+#        - "/fariblog/login"
+#        - "/fariGateway/code"
+#        -
+#spring:
+#  main:
+#    allow-bean-definition-overriding: true
+#  application:
+#    name: fari-gateway
+#  datasource:
+#    druid:
+#      url: jdbc:mysql://localhost:3306/fariblog
+#      username: omnitrix
+#      password: dbpassword
+#  security:
+#    oauth2:
+#      resourceserver:
+#        jwt:
+#          jwk-set-uri: http://localhost:${server.port}/fariAuth/rsa/publicKey
+#  cloud:
+#    nacos:
+#      discovery:
+#        server-addr: localhost:8848
+#        username: nacos
+#        password: nacospassword
+#    gateway:
+#      discovery:
+#        locator:
+#          enabled: true
+#          lower-case-service-id: true
+#      routes:
+#        - id: fariAuthRouter
+#          uri: lb://fari-auth
+#          predicates:
+#            - Path=/fariAuth/**
+#          filters:
+#            - StripPrefix=1
+#        - id: fariWebRouter
+#          uri: lb://fari-web
+#          predicates:
+#            - Path=/fariWeb/**
+#          filters:
+#            - StripPrefix=1
