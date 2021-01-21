@@ -9,7 +9,14 @@
 
 > A micro-service based front-end & back-end separated blog system.
 
-[toc]
+## Table of Contents
+
+* [Project Details](#project-details)
+   * [<a href="/gomnitrix/fariblog/blob/dev/demo">Demo</a>](#-demo)
+* [Schedule](#schedule)
+* [Thanks](#thanks)
+* [Author](#-author)
+* [Show your support](#-show-your-support)
 
 ## Project Details
 
