@@ -77,7 +77,7 @@
 <script>
 import Vditor from 'vditor'
 import FariFloatingBtn from '@c/FariFloatingBtn/floatingBtn.vue'
-import { postBlog, updateBlog, getBlog } from '@/api/blogs'
+import { postBlog, updateBlog, getBlog, getQiniuToken } from '@/api/blogs'
 export default {
   name: 'FariEditor',
   components: {
@@ -119,6 +119,24 @@ export default {
     this.editor = new Vditor('mdEditor', {
       cache: {
         enable: false
+      },
+      upload: {
+        accept: 'image/*',
+        token: 'test',
+        filename (name) {
+          // eslint-disable-next-line no-useless-escape
+          return name.replace(/[^(a-zA-Z0-9\u4e00-\u9fa5\.)]/g, '')
+            // eslint-disable-next-line no-useless-escape
+            .replace(/[\?\\/:|<>\*\[\]\(\)\$%\{\}@~]/g, '')
+            .replace('/\\s/g', '')
+        },
+        handler (files) {
+          // var token = this.getImageToken()
+          // console.log(token)
+          for (var i = 0; i < files.length; i++) {
+            console.log(files[i])
+          }
+        }
       },
       placeholder: this.welcome,
       minHeight: 1000,
@@ -202,8 +220,7 @@ export default {
       console.log(htmlContent)
     },
     checkIfUpdate () {
-      if (this.$route.params.blogId === null) return
-      console.log('UPDATE!')
+      if (typeof this.$route.params.blogId === 'undefined') return
       var blogId = this.$route.params.blogId
       this.method = this.update
       getBlog(blogId).then(response => {
@@ -264,6 +281,7 @@ export default {
       }
       )
     },
+    // 更新当前博客标题，正文等内容
     update: function () {
       this.$refs.blogInfoForm.validate((valid) => {
         if (!valid) {
@@ -298,6 +316,19 @@ export default {
         }
       }
       )
+    },
+    getUploadToken () {
+      getQiniuToken().then(response => {
+        if (response.success === true) {
+          var token = response.data.token
+          return token
+        } else {
+          this.$message({
+            type: 'error',
+            message: response.message
+          })
+        }
+      })
     }
     // async open_md () {
     //   const filePath = await dialog.open({

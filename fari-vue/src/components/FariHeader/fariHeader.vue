@@ -68,7 +68,6 @@ export default {
   data () {
     return {
       homePage: '',
-      editorPage: '',
       showAddBtn: true,
       showDeleteBtn: false,
       showEditBtn: false,
@@ -78,8 +77,7 @@ export default {
   },
   watch: {
     userId (newValue, oldValue) {
-      this.editorPage = process.env.VUE_APP_WEB_API + `/user/${this.userId}/editor`
-      this.homePage = process.env.VUE_APP_WEB_API + `/user/${this.userId}/home`
+      this.homePage = process.env.VUE_APP_WEB_API + `/user/${this.userName}/${this.userId}/home`
     },
     $route (toRoute, fromRoute) {
       this.renderMenu(toRoute.name)
