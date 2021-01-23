@@ -37,15 +37,12 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
     @Override
     public List<String> getCoverUrlByBlogs(List<BlogDto> blogDtos) {
         List<String> coverUrls = new ArrayList<>();
-        List<Long> imgUids = new ArrayList<>();
+        StringBuilder builder = new StringBuilder();
         for (BlogDto blogDto : blogDtos) {
-            imgUids.add(blogDto.getCoverUid());
-        }
-        List<Image> covers = listByIds(imgUids);
-        for (Image cover : covers) {
-            String key = cover.getImgUrl();
-            String url = "http://" + domain + key;
-            coverUrls.add(url);
+            String key = getById(blogDto.getCoverUid()).getImgUrl();
+            builder.append("http://").append(domain).append("/").append(key);
+            coverUrls.add(builder.toString());
+            builder.setLength(0);
         }
         return coverUrls;
     }
@@ -75,5 +72,12 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
         Image image = converter.fromImageDto(imageDto);
         this.save(image);
         return image.getUid();
+    }
+
+    @Override
+    public String getImageUrl(long uid) {
+        Image image = getById(uid);
+        String key = image.getImgUrl();
+        return "http://" + domain + "/" + key;
     }
 }

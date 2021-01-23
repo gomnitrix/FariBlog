@@ -1,6 +1,7 @@
 package com.gomnitrix.commons.service;
 
 import com.gomnitrix.commons.dto.BlogDto;
+import com.google.gson.JsonObject;
 
 import java.util.List;
 
@@ -30,7 +31,7 @@ public interface BlogService {
      * @param pageSize
      * @return
      */
-    List<BlogDto> getBlogsInfoByUserID(long userID, int pageIndex, int pageSize, String... columns);
+    List<JsonObject> getBlogsInfoByUserID(long userID, int pageIndex, int pageSize, String... columns);
 
     /**
      * 为用户添加一篇博客

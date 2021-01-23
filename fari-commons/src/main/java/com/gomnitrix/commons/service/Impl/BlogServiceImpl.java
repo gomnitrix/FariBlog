@@ -12,10 +12,13 @@ import com.gomnitrix.commons.mapper.BlogMapper;
 import com.gomnitrix.commons.service.BlogService;
 import com.gomnitrix.commons.service.ImageService;
 import com.gomnitrix.commons.service.UuidService;
+import com.gomnitrix.commons.utils.JsonUtil;
+import com.google.gson.JsonObject;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -59,14 +62,21 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog> implements Bl
     }
 
     @Override
-    public List<BlogDto> getBlogsInfoByUserID(long userID, int pageIndex, int pageSize, String... columns) {
+    public List<JsonObject> getBlogsInfoByUserID(long userID, int pageIndex, int pageSize, String... columns) {
         QueryWrapper<Blog> wrapper = new QueryWrapper<>();
         wrapper.select(columns)
                 .eq("author_id", userID)
                 .orderByDesc("create_time");
         IPage<Blog> blogsInfo = blogMapper.selectPage(new Page<>(pageIndex, pageSize), wrapper);
-        blogsInfo.getPages();
-        return converter.toBlogDtos(blogsInfo.getRecords());
+//        blogsInfo.getPages();
+        List<Blog> blogs = blogsInfo.getRecords();
+        List<JsonObject> jsonBlogs = new ArrayList<>();
+        for(Blog blog : blogs){
+            JsonObject jsonBlog = JsonUtil.obj2JsonObj(blog);
+            jsonBlog.addProperty("cover", imageService.getImageUrl(blog.getCoverUid()));
+            jsonBlogs.add(jsonBlog);
+        }
+        return jsonBlogs;
     }
 
     @Override

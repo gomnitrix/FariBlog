@@ -6,6 +6,8 @@ import com.gomnitrix.commons.exception.InvalidParameterException;
 import com.gomnitrix.commons.exception.PermissionDeniedException;
 import com.gomnitrix.commons.service.BlogService;
 import com.gomnitrix.commons.service.ImageService;
+import com.gomnitrix.commons.utils.JsonUtil;
+import com.google.gson.JsonObject;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
@@ -36,11 +38,11 @@ public class BlogsController {
      */
     @GetMapping("/blogsInfo/{pageSize}/{pageIndex}")
     public String getBlogsInfo(@PathVariable int pageIndex, @PathVariable int pageSize, @RequestHeader("userId") String userId) {
-        List<BlogDto> blogs = blogService.getBlogsInfoByUserID(Long.parseLong(userId), pageIndex, pageSize,
+        List<JsonObject> blogs = blogService.getBlogsInfoByUserID(Long.parseLong(userId), pageIndex, pageSize,
                 "uid", "title", "summary", "create_time", "cover_uid");
-        List<String> covers = imageService.getCoverUrlByBlogs(blogs);
+//        List<String> covers = imageService.getCoverUrlByBlogs(blogs);
         return new SuccessResponse.Builder().addItem("blogs", blogs)
-                                            .addItem("covers", covers)
+//                                            .addItem("covers", covers)
                                             .build().toJson();
     }
 
@@ -80,7 +82,10 @@ public class BlogsController {
     @GetMapping("/article/{blogId}")
     public String getArticle(@PathVariable long blogId){
         BlogDto blogDto = blogService.getBlogByUid(blogId);
-        return new SuccessResponse.Builder().addItem("blog", blogDto).build().toJson();
+        String cover = imageService.getImageUrl(blogDto.getCoverUid());
+        JsonObject blogJson = JsonUtil.obj2JsonObj(blogDto);
+        blogJson.addProperty("cover", cover);
+        return new SuccessResponse.Builder().addItem("blog", blogJson).build().toJson();
     }
 
     @DeleteMapping("/blog/{blogId}")

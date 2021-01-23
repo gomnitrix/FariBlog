@@ -20,4 +20,5 @@ public interface ImageService extends IService<Image> {
     void updateCoverBlogUid(BlogDto blogDto);
     void deprecateImage(Long uid);
     long saveImage(ImageDto imageDto);
+    String getImageUrl(long uid);
 }
