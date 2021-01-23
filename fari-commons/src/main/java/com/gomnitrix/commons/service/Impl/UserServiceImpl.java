@@ -1,4 +1,4 @@
-package com.gomnitrix.commons.service;
+package com.gomnitrix.commons.service.Impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -7,6 +7,7 @@ import com.gomnitrix.commons.dto.UserDto;
 import com.gomnitrix.commons.entity.User;
 import com.gomnitrix.commons.exception.UserNotFoundException;
 import com.gomnitrix.commons.mapper.UserMapper;
+import com.gomnitrix.commons.service.UuidService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

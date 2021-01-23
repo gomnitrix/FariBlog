@@ -1,7 +1,6 @@
 package com.gomnitrix.commons.service;
 
 import com.gomnitrix.commons.dto.BlogDto;
-import com.gomnitrix.commons.entity.Blog;
 
 import java.util.List;
 
@@ -22,7 +21,7 @@ public interface BlogService {
      * @param pageSize
      * @return
      */
-    List<Blog> getBlogsByUserID(long userID, int pageIndex, int pageSize);
+    List<BlogDto> getBlogsByUserID(long userID, int pageIndex, int pageSize);
 
     /**
      * 通过用户uid，以分页查询方式获取用户的所有博客摘要
@@ -31,7 +30,7 @@ public interface BlogService {
      * @param pageSize
      * @return
      */
-    List<Blog> getBlogsInfoByUserID(long userID, int pageIndex, int pageSize, String... columns);
+    List<BlogDto> getBlogsInfoByUserID(long userID, int pageIndex, int pageSize, String... columns);
 
     /**
      * 为用户添加一篇博客

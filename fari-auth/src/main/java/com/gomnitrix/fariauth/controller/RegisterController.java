@@ -4,7 +4,7 @@ import com.gomnitrix.commons.Response.SuccessResponse;
 import com.gomnitrix.commons.configuration.AuthServerConstConfig;
 import com.gomnitrix.commons.dto.UserDto;
 import com.gomnitrix.commons.exception.InvalidParameterException;
-import com.gomnitrix.commons.service.UserServiceImpl;
+import com.gomnitrix.commons.service.Impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;

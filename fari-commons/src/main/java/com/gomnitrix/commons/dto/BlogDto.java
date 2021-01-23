@@ -54,7 +54,7 @@ public class BlogDto {
      * 标题图片uid
      */
 
-    private String coverUid;
+    private Long coverUid;
 
     /**
      * 状态

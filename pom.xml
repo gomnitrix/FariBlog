@@ -21,7 +21,6 @@
         <module>fari-auth</module>
         <module>fari-gateway</module>
         <module>fari-web</module>
-        <module>fari-image</module>
     </modules>
 
     <properties>
@@ -30,6 +29,7 @@
         <spring-boot.version>2.3.4.RELEASE</spring-boot.version>
         <spring-cloud-alibaba.version>2.2.3.RELEASE</spring-cloud-alibaba.version>
         <org.mapstruct.version>1.4.1.Final</org.mapstruct.version>
+        <mybatis-plus.version>3.4.0</mybatis-plus.version>
     </properties>
 
 
@@ -71,17 +71,17 @@
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-boot-starter</artifactId>
-            <version>3.4.0</version>
+            <version>${mybatis-plus.version}</version>
         </dependency>
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-core</artifactId>
-            <version>3.4.0</version>
+            <version>${mybatis-plus.version}</version>
         </dependency>
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-extension</artifactId>
-            <version>3.4.0</version>
+            <version>${mybatis-plus.version}</version>
         </dependency>
         <dependency>
             <groupId>com.alibaba</groupId>

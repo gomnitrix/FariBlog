@@ -77,7 +77,7 @@ public class MpGenerator {
         // 表明生成策略
         strategy.setNaming(NamingStrategy.underline_to_camel);
         // 表明，多个英文逗号分割或者 new String[]{"",""}
-        strategy.setInclude("t_user", "t_blog");
+        strategy.setInclude("t_user", "t_blog", "t_image", "t_oss_name");
         strategy.setEntityLombokModel(true);
         strategy.setRestControllerStyle(true);
         strategy.setControllerMappingHyphenStyle(true);// 驼峰转连字符

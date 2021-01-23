@@ -12,7 +12,6 @@
     <name>fari-web</name>
     <description>The web module of the Fariblog System.</description>
 
-
     <dependencies>
         <dependency>
             <groupId>com.gomnitrix</groupId>

@@ -1,30 +1,50 @@
 package com.gomnitrix.fariweb.configuration;
 
 import com.qiniu.util.Auth;
-import org.springframework.beans.factory.annotation.Value;
+import com.qiniu.util.StringMap;
+import lombok.Data;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
+@Data
+@ConfigurationProperties(prefix = "qiniu")
 public class ImageOssConfig {
-    @Value("${qiniu.accessKey}")
-    private static String accessKey;
 
-    @Value("${qiniu.secretKey")
-    private static String secretKey;
+    private String accessKey;
 
-    @Value("${qiniu.bucket")
-    protected static String bucket;
+    private String secretKey;
 
-    @Value("${qiniu.zone}")
-    protected static String zone;
+    private String bucket;
+
+    private String zone;
+
+    private String domain;
+
+    private static long expireSeconds = 3600;
 
     @Bean
-    Auth getAuth(){
+    public Auth getAuth() {
         return Auth.create(accessKey, secretKey);
     }
 
-    public static String getBucket() {
-        return bucket;
+    public static StringMap getPolicy() {
+        StringMap policy = new StringMap();
+        policy.putNotEmpty("mimeLimit", "image/jpeg;image/png;image/gif;");
+        policy.putNotEmpty("callbackUrl", "http://81.71.139.43:6002/fariWeb/oss/qiniu/callbackPoint");
+        policy.putNotEmpty("callbackBodyType", "application/json");
+        policy.put("callbackBody", "{\"imgName\":\"$(fname)\"," +
+                                            "\"imgUrl\":\"$(key)\","+
+                                            "\"extensionName\":\"$(ext)\"," +
+                                            "\"fileSize\":\"$(fsize)\","+
+                                            "\"imgType\":\"$(x:ftype)\"," +
+                                            "\"userUid\":\"$(x:userid)\"," +
+                                            "\"blogUid\":\"$(x:blogid)\"}");
+        return policy;
+    }
+
+    public static long getExpireSeconds() {
+        return expireSeconds;
     }
 }

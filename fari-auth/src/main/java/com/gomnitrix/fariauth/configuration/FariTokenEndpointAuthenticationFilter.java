@@ -2,7 +2,7 @@ package com.gomnitrix.fariauth.configuration;
 
 import com.gomnitrix.commons.Response.ErrorResponse;
 import com.gomnitrix.commons.exception.AuthenFailedException;
-import com.gomnitrix.commons.service.UserServiceImpl;
+import com.gomnitrix.commons.service.Impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.Authentication;

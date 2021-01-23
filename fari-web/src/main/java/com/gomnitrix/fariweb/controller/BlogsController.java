@@ -2,10 +2,10 @@ package com.gomnitrix.fariweb.controller;
 
 import com.gomnitrix.commons.Response.SuccessResponse;
 import com.gomnitrix.commons.dto.BlogDto;
-import com.gomnitrix.commons.entity.Blog;
 import com.gomnitrix.commons.exception.InvalidParameterException;
 import com.gomnitrix.commons.exception.PermissionDeniedException;
 import com.gomnitrix.commons.service.BlogService;
+import com.gomnitrix.commons.service.ImageService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
@@ -23,6 +23,9 @@ public class BlogsController {
     @Autowired
     BlogService blogService;
 
+    @Autowired
+    ImageService imageService;
+
     /**
      * 给前端用户主页的博客card返回摘要信息
      *
@@ -33,9 +36,12 @@ public class BlogsController {
      */
     @GetMapping("/blogsInfo/{pageSize}/{pageIndex}")
     public String getBlogsInfo(@PathVariable int pageIndex, @PathVariable int pageSize, @RequestHeader("userId") String userId) {
-        List<Blog> blogs = blogService.getBlogsInfoByUserID(Long.parseLong(userId), pageIndex, pageSize,
-                "uid", "title", "summary", "create_time");
-        return new SuccessResponse.Builder().addItem("blogs", blogs).build().toJson();
+        List<BlogDto> blogs = blogService.getBlogsInfoByUserID(Long.parseLong(userId), pageIndex, pageSize,
+                "uid", "title", "summary", "create_time", "cover_uid");
+        List<String> covers = imageService.getCoverUrlByBlogs(blogs);
+        return new SuccessResponse.Builder().addItem("blogs", blogs)
+                                            .addItem("covers", covers)
+                                            .build().toJson();
     }
 
     @GetMapping("/pageNum/{pageSize}")

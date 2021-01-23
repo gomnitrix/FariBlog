@@ -74,7 +74,7 @@ public class Blog extends Model<Blog> {
      * 标题图片uid
      */
     @TableField("cover_uid")
-    private String coverUid;
+    private Long coverUid;
 
     /**
      * 状态
