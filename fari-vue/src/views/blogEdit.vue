@@ -1,7 +1,7 @@
 <template>
   <div
     class="wrapper"
-    style="overflow: auto;width: 100%;height: 100%;"
+    style="overflow: auto;width: 100%;height: 100%;margin-bottom:40px;"
   >
     <FariFloatingBtn
       :display="true"
@@ -14,7 +14,7 @@
       :span="16"
       :offset="4"
     >
-      <div style="margin-left:20%; margin-right:20%;">
+      <div>
         <el-row>
           <el-form
             ref="blogInfoForm"
@@ -31,18 +31,25 @@
                 autocomplete="off"
               />
             </el-form-item>
-            <el-form-item
-              label="Summary"
-              prop="summary"
-            >
-              <el-input
-                v-model="blogInfoForm.summary"
-                type="textarea"
-                :rows="2"
-                autocomplete="off"
-                placeholder="请输入博客简介，字数不超过150字。"
+            <el-row>
+              <el-form-item
+                label="Summary"
+                prop="summary"
+              >
+                <el-input
+                  v-model="blogInfoForm.summary"
+                  type="textarea"
+                  :rows="2"
+                  autocomplete="off"
+                  placeholder="请输入博客简介，字数不超过150字。"
+                />
+              </el-form-item>
+              <CoverUploader
+                :user-id="userId"
+                :blog-id="blogId"
+                @coveruid="setCover"
               />
-            </el-form-item>
+            </el-row>
             <!-- <el-form-item
             label="Blog Summary"
             :label-width="formLabelWidth"
@@ -77,11 +84,14 @@
 <script>
 import Vditor from 'vditor'
 import FariFloatingBtn from '@c/FariFloatingBtn/floatingBtn.vue'
+import CoverUploader from '@c/FariUpload/blogCoverUploader.vue'
 import { postBlog, updateBlog, getBlog, getQiniuToken } from '@/api/blogs'
+import * as qiniu from 'qiniu-js'
 export default {
   name: 'FariEditor',
   components: {
-    FariFloatingBtn
+    FariFloatingBtn,
+    CoverUploader
   },
   data () {
     return {
@@ -89,7 +99,8 @@ export default {
       welcome: '# 🎉 Welcome to use FariBlog Markdown Editor (suported by Vditor)!',
       blogInfoForm: {
         title: '',
-        summary: ''
+        summary: '',
+        coverUid: ''
       },
       blogInfoRules: {
         title: [
@@ -109,7 +120,9 @@ export default {
       timer: null,
       userName: null,
       userId: '',
-      method: this.post
+      blogId: this.$route.params.blogId,
+      method: this.post,
+      ossDomain: 'http://qnahkr248.hn-bkt.clouddn.com/'
     }
   },
   mounted () {
@@ -122,6 +135,7 @@ export default {
       },
       upload: {
         accept: 'image/*',
+        max: 2 * 1024 * 1024,
         token: 'test',
         filename (name) {
           // eslint-disable-next-line no-useless-escape
@@ -131,14 +145,54 @@ export default {
             .replace('/\\s/g', '')
         },
         handler (files) {
-          // var token = this.getImageToken()
-          // console.log(token)
-          for (var i = 0; i < files.length; i++) {
-            console.log(files[i])
-          }
+          var token = null
+          getQiniuToken().then((response) => {
+            if (response.success === true) {
+              token = response.data.token
+              if (typeof token === 'undefined' || token === null) return
+              for (var i = 0; i < files.length; i++) {
+                console.log(files[i])
+                var file = files[i]
+                var key = null
+                var putExtra = {
+                  fname: file.name,
+                  mimeType: file.type
+                }
+                var config = {
+                  useCdnDomain: true,
+                  region: qiniu.region.z2,
+                  checkByMD5: true
+                }
+                const observable = qiniu.upload(file, key, token, putExtra, config)
+                const observer = {
+                  next (res) {
+
+                  },
+                  error (err) {
+                    self.$message({
+                      type: 'error',
+                      message: err.message
+                    })
+                  },
+                  complete (res) {
+                    console.log(res)
+                    var url = self.ossDomain + res.key
+                    var ImgMd = `![](${url})`
+                    self.editor.insertValue(ImgMd)
+                  }
+                }
+                observable.subscribe(observer)
+              }
+            } else {
+              self.$message({
+                type: 'error',
+                message: response.message
+              })
+            }
+          })
         }
       },
-      placeholder: this.welcome,
+      placeholder: self.welcome,
       minHeight: 1000,
       width: '100%',
       outline: true, // 大纲模式
@@ -200,11 +254,9 @@ export default {
         }],
       preview: {
         delay: 200
-      },
-      after: () => {
-        // this.vditor.setValue('# 🎉️ Welcome to use Tauri Vditor!')
       }
     })
+    // 对于博客修改的情况进行相应初始化
     self.checkIfUpdate()
   },
   methods: {
@@ -228,6 +280,7 @@ export default {
           var blog = response.data.blog
           this.blogInfoForm.title = blog.title
           this.blogInfoForm.summary = blog.summary
+          this.blogInfoForm.coverUid = blog.coverUid
           var content = this.editor.html2md(blog.content)
           this.editor.setValue(content)
         } else {
@@ -245,6 +298,7 @@ export default {
       params.content = this.editor.getHTML()
       params.author = this.$route.params.user
       params.authorId = this.$route.params.userId
+      params.coverUid = this.blogInfoForm.coverUid
       return params
     },
     post: function () {
@@ -254,8 +308,9 @@ export default {
         } else {
           this.loading = true
           var params = this.getParams()
+          console.log(params)
           postBlog(params).then(response => {
-            if (response.code === this.$ECode.SUCCESS) {
+            if (response.success === true) {
               this.$message({
                 type: 'success',
                 message: response.message
@@ -317,18 +372,8 @@ export default {
       }
       )
     },
-    getUploadToken () {
-      getQiniuToken().then(response => {
-        if (response.success === true) {
-          var token = response.data.token
-          return token
-        } else {
-          this.$message({
-            type: 'error',
-            message: response.message
-          })
-        }
-      })
+    setCover (data) {
+      this.blogInfoForm.coverUid = data
     }
     // async open_md () {
     //   const filePath = await dialog.open({

@@ -2,7 +2,7 @@
   <div>
     <div style="height:15px;" />
     <el-row>
-      <el-col :span="2">
+      <el-col :span="4">
         <a :href="homePage"><i class="el-icon-caret-top"> {{ userName }}'s Blog</i></a>
       </el-col>
       <el-col
@@ -71,8 +71,12 @@ export default {
       showAddBtn: true,
       showDeleteBtn: false,
       showEditBtn: false,
+      shortOffset: 19,
+      shortSpan: 1,
+      longOffset: 18,
+      longSpan: 2,
       span: 1,
-      offset: 21
+      offset: 19
     }
   },
   watch: {
@@ -134,14 +138,20 @@ export default {
     },
     renderMenu (toRoute) {
       if (toRoute === null) return
-      if (toRoute === 'Blog') {
-        this.span = 2
-        this.offset = 20
+      if (toRoute === 'Home') {
+        this.span = this.longSpan
+        this.offset = this.longOffset
+        this.showAddBtn = true
+        this.showDeleteBtn = false
+        this.showEditBtn = false
+      } else if (toRoute === 'Blog') {
+        this.span = this.longSpan
+        this.offset = this.longOffset
         this.showDeleteBtn = true
         this.showEditBtn = true
       } else if (toRoute === 'Editor') {
-        this.span = 1
-        this.offset = 21
+        this.span = this.shortSpan
+        this.offset = this.shortOffset
         this.showAddBtn = false
         this.showDeleteBtn = false
         this.showEditBtn = false

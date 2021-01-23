@@ -1,12 +1,9 @@
 <template>
   <el-card
-    style="padding: '30px 0px 0px 0px'; border-radius: 10px; margin-bottom:50px;pointer-events: none;"
+    style="padding: '30px 0px 0px 0px'; border-radius: 10px; margin-bottom:50px;pointer-events: none; width:860px;"
     shadow="always"
   >
-    <img
-      :src="fariImgSrc"
-      class="image"
-    >
+    <Cover :cover="cover" />
     <div
       style="padding: 10px 60px 60px 60px;"
       v-html="blogContent"
@@ -15,18 +12,25 @@
 </template>
 
 <script>
-
+import Cover from '@c/BlogCard/blogCover.vue'
 export default {
   name: 'BlogCard',
+  components: {
+    Cover
+  },
   props: {
     blogContent: {
+      type: String,
+      default: ''
+    },
+    cover: {
       type: String,
       default: ''
     }
   },
   data () {
     return {
-      fariImgSrc: require('@/assets/FariBlog.png'),
+      // fariImgSrc: require('@/assets/FariBlog.png'),
       blog: null
     }
   }

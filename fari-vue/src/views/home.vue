@@ -8,8 +8,8 @@
       :key="index"
     >
       <el-col
-        :span="8"
-        :offset="8"
+        :span="14"
+        :offset="5"
       >
         <BlogCard
           :blog-info="blog"
@@ -69,8 +69,9 @@ export default {
     },
     loadBlogs () {
       getBlogsInfo(this.pageSize, this.pageIndex).then(response => {
-        if (response.code === this.$ECode.SUCCESS) {
-          this.blogs = response.data.blogs
+        if (response.success === true) {
+          var blogs = response.data.blogs
+          this.blogs = blogs
         } else {
           this.$message({
             type: 'error',

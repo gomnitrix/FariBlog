@@ -1,17 +1,14 @@
 <template>
   <el-card
     :body-style="{ padding: '0px' }"
-    style="padding: '30px 0px 0px 0px'; border-radius: 10px; margin-bottom:50px;"
+    style="padding: '30px 0px 0px 0px'; border-radius: 10px; margin-bottom:50px;width:860px;"
     shadow="hover"
   >
     <div
       style="cursor:pointer;"
       @click="getBlog"
     >
-      <img
-        :src="fariImgSrc"
-        class="image"
-      >
+      <Cover :cover="blogInfo.cover" />
       <div style="padding: 10px 60px 60px 60px;">
         <h2><strong>{{ blogInfo.title }}</strong></h2>
         <p> {{ blogInfo.summary }} </p>
@@ -22,8 +19,12 @@
 </template>
 
 <script>
+import Cover from '@c/BlogCard/blogCover.vue'
 export default {
   name: 'BlogCard',
+  components: {
+    Cover
+  },
   props: {
     blogInfo: {
       type: Object,
@@ -32,14 +33,17 @@ export default {
           title: 'title',
           summary: 'description',
           createTime: 'postTime',
-          uid: 'blogId'
+          uid: 'blogId',
+          cover: ''
         }
       }
     }
   },
   data () {
     return {
-      fariImgSrc: require('@/assets/FariBlog.png'),
+      // fariImgSrc: require('@/assets/FariBlog.png'),
+      defaultCover: 'http://qnahkr248.hn-bkt.clouddn.com/FariBlog.png',
+      fit: 'fill',
       userName: this.$route.params.user,
       userId: this.$route.params.userId
     }
@@ -86,12 +90,6 @@ export default {
   .button {
     padding: 0;
     float: right;
-  }
-
-  .image {
-    width: 100%;
-    height: 268px;
-    display: block;
   }
 
   .clearfix:before,

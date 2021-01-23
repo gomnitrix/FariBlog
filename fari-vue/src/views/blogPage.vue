@@ -16,17 +16,15 @@
         </div>
       </el-col>
     </el-row>
-    <el-row>
-      <el-col
-        v-if="flag"
-        :span="width"
-        :offset="offset"
-      >
-        <Blog
-          :blog-content="blog.content"
-        />
-      </el-col>
-    </el-row>
+    <div
+      v-if="flag"
+      id="blogBox"
+    >
+      <Blog
+        :blog-content="blog.content"
+        :cover="blog.cover"
+      />
+    </div>
   </div>
 </template>
 
@@ -78,3 +76,11 @@ export default {
 
 }
 </script>
+
+<style scoped>
+  #blogBox {
+    display: flex;
+    justify-content: center; /* 水平居中 */
+    /* align-items: center;     垂直居中 */
+  }
+</style>

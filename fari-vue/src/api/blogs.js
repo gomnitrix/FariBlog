@@ -49,3 +49,11 @@ export function deleteBlog (blogId) {
     method: 'delete'
   })
 }
+
+export function getQiniuToken () {
+  var tokenUrl = process.env.VUE_APP_SERVER_API + '/fariWeb/oss/qiniu/upload/token'
+  return request({
+    url: tokenUrl,
+    method: 'get'
+  })
+}
