@@ -24,6 +24,9 @@ public class ImageOssConfig {
 
     private static long expireSeconds = 3600;
 
+    public static final String callBackUrl = "http://81.71.139.43:6002/fariWeb/oss/qiniu/callbackPoint";
+    public static final String contentType = "application/json";
+
     @Bean
     public Auth getAuth() {
         return Auth.create(accessKey, secretKey);
@@ -32,8 +35,8 @@ public class ImageOssConfig {
     public static StringMap getPolicy() {
         StringMap policy = new StringMap();
         policy.putNotEmpty("mimeLimit", "image/jpeg;image/png;image/gif;");
-        policy.putNotEmpty("callbackUrl", "http://81.71.139.43:6002/fariWeb/oss/qiniu/callbackPoint");
-        policy.putNotEmpty("callbackBodyType", "application/json");
+        policy.putNotEmpty("callbackUrl", callBackUrl);
+        policy.putNotEmpty("callbackBodyType", contentType);
         policy.put("callbackBody", "{\"imgName\":\"$(fname)\"," +
                                             "\"imgUrl\":\"$(key)\","+
                                             "\"extensionName\":\"$(ext)\"," +

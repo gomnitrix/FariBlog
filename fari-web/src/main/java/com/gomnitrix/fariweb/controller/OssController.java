@@ -1,12 +1,16 @@
 package com.gomnitrix.fariweb.controller;
 
+import com.gomnitrix.commons.Response.ErrorResponse;
 import com.gomnitrix.commons.Response.SuccessResponse;
 import com.gomnitrix.commons.dto.ImageDto;
+import com.gomnitrix.commons.exception.AuthenFailedException;
 import com.gomnitrix.commons.exception.InvalidParameterException;
 import com.gomnitrix.commons.service.Impl.ImageServiceImpl;
+import com.gomnitrix.commons.utils.JsonUtil;
 import com.gomnitrix.fariweb.configuration.ImageOssConfig;
 import com.qiniu.util.Auth;
 import com.qiniu.util.StringMap;
+import com.qiniu.util.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -44,10 +48,15 @@ public class OssController {
     }
 
     @PostMapping("/qiniu/callbackPoint")
-    public String qiniuCallbackPoint(@RequestBody @Validated ImageDto imageDto, BindingResult errors){
+    public String qiniuCallbackPoint(@RequestBody @Validated ImageDto imageDto, BindingResult errors, @RequestHeader("Authorization") String authorization){
         if (errors.hasErrors()) {
             FieldError error = errors.getFieldError();
             throw new InvalidParameterException(Objects.requireNonNull(error).getDefaultMessage());
+        }
+        String callbackUrl = ImageOssConfig.callBackUrl;
+        if(!auth.isValidCallback(authorization, callbackUrl, StringUtils.utf8Bytes(JsonUtil.objectToJson(imageDto)), callbackUrl)){
+            //TODO remove image
+            return new ErrorResponse.Builder(new AuthenFailedException("QiniuCloud callback authentication failed.")).build().toJson();
         }
         imageService.saveImage(imageDto);
         return new SuccessResponse.Builder().addItem("image", imageDto).build().toJson();

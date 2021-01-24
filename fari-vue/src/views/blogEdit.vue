@@ -5,7 +5,7 @@
   >
     <FariFloatingBtn
       :display="true"
-      right="13.333%"
+      right="80px"
       :icon="btnIcon"
       :loading="loading"
       @clicked="method"
@@ -106,7 +106,7 @@ export default {
         title: [
           { required: true, message: '请输入博客标题', trigger: 'blur' },
           { min: 1, message: '用户名长度大于等于 1 个字符', trigger: 'blur' },
-          { max: 20, message: '用户名长度不能大于 20 个字符', trigger: 'blur' }
+          { max: 50, message: '用户名长度不能大于 20 个字符', trigger: 'blur' }
         ],
         summary: [
           { required: true, message: '请输入博客摘要', trigger: 'blur' },
@@ -175,7 +175,6 @@ export default {
                     })
                   },
                   complete (res) {
-                    console.log(res)
                     var url = self.ossDomain + res.key
                     var ImgMd = `![](${url})`
                     self.editor.insertValue(ImgMd)

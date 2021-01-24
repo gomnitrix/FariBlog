@@ -1,31 +1,48 @@
 <template>
-  <el-upload
-    class="coverUploader"
-    drag
-    :action="uploadUrl"
-    :accept="acceptType"
-    :on-success="handleSuccess"
-    :on-error="handleError"
-    :before-upload="onBeforeUpload"
-    :data="postData"
-  >
-    <i class="el-icon-upload" />
-    <div class="el-upload__text">
-      将封面图片拖到此处，或<em>点击上传</em>
-    </div>
-    <div
-      slot="tip"
-      class="el-upload__tip"
+  <div>
+    <el-upload
+      ref="uploader"
+      class="coverUploader"
+      drag
+      :auto-upload="false"
+      :file-list="fileList"
+      :action="uploadUrl"
+      :accept="acceptType"
+      :on-success="handleSuccess"
+      :on-error="handleError"
+      :before-upload="onBeforeUpload"
+      :on-change="onFileChange"
+      :data="postData"
     >
-      只能上传jpg/png文件，且不超过500kb
-    </div>
-  </el-upload>
+      <i class="el-icon-upload" />
+      <div class="el-upload__text">
+        将封面图片拖到此处，或<em>点击上传</em>
+      </div>
+      <div
+        slot="tip"
+        class="el-upload__tip"
+      >
+        只能上传jpg/png文件，且不超过512kb
+      </div>
+    </el-upload>
+    <FariCropper
+      ref="cropper"
+      :dialog-visible="cropperVisible"
+      :image="image"
+      @finish="onCropFinished"
+      @close="closeCropper"
+    />
+  </div>
 </template>
 <script>
 import * as qiniu from 'qiniu-js'
+import FariCropper from '@c/FariUpload/fariCropper.vue'
 import { getQiniuToken } from '@/api/blogs'
 export default {
   name: 'CoverUploader',
+  components: {
+    FariCropper
+  },
   props: {
     blogId: {
       type: String,
@@ -40,26 +57,26 @@ export default {
     return {
       uploadUrl: 'https://upload-z2.qiniup.com',
       acceptType: '.jpg,.jpeg,.png,.gif',
-      sizeLimit: 1 * 1024 * 1024, // 1Mb
+      sizeLimit: 0.5 * 1024 * 1024, // 1Mb
       postData: {
         key: null,
         token: null,
         'x:ftype': 'Cover',
         'x:userid': this.userId,
         'x:blogid': this.blogId
-      }
+      },
+      copyFiles: null,
+      cropperVisible: false,
+      fileList: [],
+      copyList: null,
+      image: ''
     }
   },
   watch: {
     userId (newValue, oldValue) {
-      console.log('userID new value:')
-      console.log(newValue)
       this.postData['x:userid'] = newValue
-      console.log(this.postData)
     },
     blogId (newValue, oldValue) {
-      console.log('blogId new value:')
-      console.log(newValue)
       this.postData['x:blogid'] = newValue
     }
   },
@@ -105,6 +122,35 @@ export default {
         this.handleError(res)
       }
     },
+    onCropFinished (file) {
+      this.cropperVisible = false
+      this.copyList = Array.from(this.$refs.uploader.fileList)
+      var uploadFiles = this.$refs.uploader.uploadFiles
+      this.copyFiles = Object.assign({}, uploadFiles)
+      var rawFile = this.copyFiles[0]
+      file.uid = rawFile.uid
+      this.copyFiles[0].size = file.size
+      this.copyFiles[0].raw = file
+      this.$refs.uploader.submit()
+    },
+    onFileChange (file, fileList) {
+      if (this.copyFiles !== null) {
+        this.$refs.uploader.uploadFiles = this.copyFiles
+        fileList = this.copyFiles
+        file = this.copyFiles[0]
+        this.fileList = this.copyList
+      }
+      if (file.status !== 'ready') {
+        return
+      }
+      var self = this
+      var reader = new FileReader()
+      reader.readAsDataURL(file.raw)
+      reader.onload = function () {
+        self.cropperVisible = true
+        self.image = reader.result
+      }
+    },
     onBeforeUpload (file) {
       const isIMAGE = file.type === 'image/jpeg' || 'image/gif' || 'image/png'
       const isLt1M = file.size < this.sizeLimit
@@ -116,6 +162,9 @@ export default {
         this.$message({ type: 'error', message: '上传文件大小不能超过1MB!' })
       }
       return isIMAGE && isLt1M
+    },
+    closeCropper () {
+      this.cropperVisible = false
     }
   }
 }

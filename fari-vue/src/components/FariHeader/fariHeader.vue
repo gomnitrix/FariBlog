@@ -41,7 +41,7 @@
             class="el-icon-delete dyn"
           />
         </a>
-        <a style="cursor:pointer;">
+        <a style="margin-right:20px;cursor:pointer;">
           <i
             style="font-size:24px;font-weight:600;"
             class="el-icon-moon dyn"
@@ -73,8 +73,10 @@ export default {
       showEditBtn: false,
       shortOffset: 19,
       shortSpan: 1,
-      longOffset: 18,
-      longSpan: 2,
+      mediumSpan: 2,
+      mediumOffset: 18,
+      longOffset: 16,
+      longSpan: 4,
       span: 1,
       offset: 19
     }
@@ -139,8 +141,8 @@ export default {
     renderMenu (toRoute) {
       if (toRoute === null) return
       if (toRoute === 'Home') {
-        this.span = this.longSpan
-        this.offset = this.longOffset
+        this.span = this.mediumSpan
+        this.offset = this.mediumOffset
         this.showAddBtn = true
         this.showDeleteBtn = false
         this.showEditBtn = false
@@ -149,6 +151,7 @@ export default {
         this.offset = this.longOffset
         this.showDeleteBtn = true
         this.showEditBtn = true
+        this.showAddBtn = true
       } else if (toRoute === 'Editor') {
         this.span = this.shortSpan
         this.offset = this.shortOffset

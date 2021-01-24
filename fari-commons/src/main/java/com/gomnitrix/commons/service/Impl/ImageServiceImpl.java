@@ -58,6 +58,7 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
 
     @Override
     public void deprecateImage(Long uid) {
+        //TODO remove image
         if (uid == null || uid == 0) return;
         UpdateWrapper<Image> wrapper = new UpdateWrapper<>();
         wrapper.eq("uid", uid).set("status", 0);
