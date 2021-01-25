@@ -18,10 +18,13 @@
     </el-row>
     <el-row>
       <el-pagination
+        v-if="paginationFlag"
         layout="prev, pager, next"
-        :total="pageNum"
+        :page-count="pageNum"
+        :page-size="pageSize"
         style="text-align:center;"
         hide-on-single-page
+        @current-change="onPageIndexChange"
       />
     </el-row>
     <BackTop
@@ -47,18 +50,25 @@ export default {
       blogs: [],
       pageSize: 8,
       pageIndex: 1,
-      pageNum: 1,
+      pageNum: 2,
+      paginationFlag: false,
       userName: this.$route.params.user
     }
   },
   mounted: function () {
-    this.loadBlogs()
+    this.init()
+    this.paginationFlag = true
   },
   methods: {
-    getPages () {
-      getPagesNum(this.pageSize).then(response => {
+    init () {
+      this.getPages(this.pageSize)
+      this.loadBlogs(this.pageSize, this.pageIndex)
+    },
+    getPages (pageSize) {
+      getPagesNum(pageSize).then(response => {
         if (response.code === this.$ECode.SUCCESS) {
-          this.pageNum = response.data.pages
+          this.pageNum = parseInt(response.data.pages)
+          this.paginationFlag = true
         } else {
           this.$message({
             type: 'error',
@@ -67,11 +77,10 @@ export default {
         }
       })
     },
-    loadBlogs () {
-      getBlogsInfo(this.pageSize, this.pageIndex).then(response => {
+    loadBlogs (pageSize, pageIndex) {
+      getBlogsInfo(pageSize, pageIndex).then(response => {
         if (response.success === true) {
-          var blogs = response.data.blogs
-          this.blogs = blogs
+          this.blogs = response.data.blogs
         } else {
           this.$message({
             type: 'error',
@@ -82,6 +91,9 @@ export default {
           }, 2000)
         }
       })
+    },
+    onPageIndexChange (currentIdx) {
+      this.loadBlogs(this.pageSize, currentIdx)
     }
   }
 }
