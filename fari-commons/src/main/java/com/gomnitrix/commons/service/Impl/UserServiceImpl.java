@@ -6,6 +6,7 @@ import com.gomnitrix.commons.configuration.GeneralConfig;
 import com.gomnitrix.commons.dto.UserDto;
 import com.gomnitrix.commons.entity.User;
 import com.gomnitrix.commons.exception.UserNotFoundException;
+import com.gomnitrix.commons.mapper.UserConvertMapper;
 import com.gomnitrix.commons.mapper.UserMapper;
 import com.gomnitrix.commons.service.UuidService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Autowired
     UuidService uuidService;
 
+    UserConvertMapper converter = UserConvertMapper.INSTANCE;
+
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
         QueryWrapper<User> wrapper = new QueryWrapper<>();
@@ -42,12 +45,20 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     public void register(UserDto userDto){
-        User user = new User();
-        user.setEmail(userDto.getEmail());
-        user.setUserName(userDto.getUserName());
-        user.setPassWord(encoder.encode(userDto.getPassWord()));
+        User user = converter.fromUserDto(userDto);
+        user.setPassWord(encoder.encode(user.getPassword()));
         user.setUid(uuidService.getUid());
         user.setSource(GeneralConfig.FARIBLOG);
         userMapper.insert(user);
+    }
+
+    public void updateUserInfo(UserDto userDto){
+        if(userDto.getUid() == null){
+            throw new UserNotFoundException();
+        }
+        if(userDto.getPassWord()!=null){
+            userDto.setPassWord(encoder.encode(userDto.getPassWord()));
+        }
+        updateById(converter.fromUserDto(userDto));
     }
 }

@@ -12,4 +12,8 @@ public abstract class GatewayConstConfig {
     public static final String AUTHORITY_PREFIX = "ROLE_";
 
     public static final String AUTHORITY_CLAIM_NAME = "authorities";
+
+    // RequestHeader Configuration
+    public static final String HEADER_USER_ID = "userId";
+    public static final String HEADER_USER_NAME = "userName";
 }

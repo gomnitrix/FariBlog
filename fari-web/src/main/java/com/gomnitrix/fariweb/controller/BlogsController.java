@@ -1,6 +1,7 @@
 package com.gomnitrix.fariweb.controller;
 
 import com.gomnitrix.commons.Response.SuccessResponse;
+import com.gomnitrix.commons.configuration.GatewayConstConfig;
 import com.gomnitrix.commons.dto.BlogDto;
 import com.gomnitrix.commons.exception.InvalidParameterException;
 import com.gomnitrix.commons.exception.PermissionDeniedException;
@@ -28,6 +29,8 @@ public class BlogsController {
     @Autowired
     ImageService imageService;
 
+    static final String USER_ID = GatewayConstConfig.HEADER_USER_ID;
+
     /**
      * 给前端用户主页的博客card返回摘要信息
      *
@@ -37,7 +40,7 @@ public class BlogsController {
      * @return 标准返回类包装的博客摘要信息
      */
     @GetMapping("/blogsInfo/{pageSize}/{pageIndex}")
-    public String getBlogsInfo(@PathVariable int pageIndex, @PathVariable int pageSize, @RequestHeader("userId") String userId) {
+    public String getBlogsInfo(@PathVariable int pageIndex, @PathVariable int pageSize, @RequestHeader(USER_ID) String userId) {
         List<JsonObject> blogs = blogService.getBlogsInfoByUserID(Long.parseLong(userId), pageIndex, pageSize,
                 "uid", "title", "summary", "create_time", "cover_uid");
 //        List<String> covers = imageService.getCoverUrlByBlogs(blogs);
@@ -47,7 +50,7 @@ public class BlogsController {
     }
 
     @GetMapping("/pageNum/{pageSize}")
-    public String getPageNum(@PathVariable int pageSize, @RequestHeader("userId") String userId) {
+    public String getPageNum(@PathVariable int pageSize, @RequestHeader(USER_ID) String userId) {
         return new SuccessResponse.Builder()
                 .addItem("pages", blogService.getPagesNum(Long.parseLong(userId), pageSize))
                 .build().toJson();
@@ -57,7 +60,7 @@ public class BlogsController {
      * 为当前jwt代表的登录用户插入一条博客
      */
     @PutMapping("/blog")
-    public String addBlogs(@RequestBody @Validated BlogDto blogDto, BindingResult errors, @RequestHeader("userId") String userId) {
+    public String addBlogs(@RequestBody @Validated BlogDto blogDto, BindingResult errors, @RequestHeader(USER_ID) String userId) {
         if (errors.hasErrors()) {
             FieldError error = errors.getFieldError();
             throw new InvalidParameterException(Objects.requireNonNull(error).getDefaultMessage());
@@ -67,7 +70,7 @@ public class BlogsController {
     }
 
     @PostMapping("/blog")
-    public String updateBlog(@RequestBody @Validated BlogDto blogDto, BindingResult errors, @RequestHeader("userId") String userId) {
+    public String updateBlog(@RequestBody @Validated BlogDto blogDto, BindingResult errors, @RequestHeader(USER_ID) String userId) {
         if (errors.hasErrors()) {
             FieldError error = errors.getFieldError();
             throw new InvalidParameterException(Objects.requireNonNull(error).getDefaultMessage());

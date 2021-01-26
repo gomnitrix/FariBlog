@@ -1,5 +1,7 @@
 package com.gomnitrix.farigateway.configuration;
 
+import com.gomnitrix.commons.configuration.AuthServerConstConfig;
+import com.gomnitrix.commons.configuration.GatewayConstConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -64,15 +66,15 @@ public class AuthorizationManager implements ReactiveAuthorizationManager<Author
             ServerHttpRequest request = exchange.getRequest().mutate()
                     .headers(httpHeaders -> {
                         // 将jwt中的信息放入http头部中
-                        httpHeaders.add("username", claims.get("user_name").toString());
-                        httpHeaders.add("userId", claims.get("userId").toString());
+                        httpHeaders.add(GatewayConstConfig.HEADER_USER_NAME, claims.get(AuthServerConstConfig.USER_NAME).toString());
+                        httpHeaders.add(GatewayConstConfig.HEADER_USER_ID, claims.get(AuthServerConstConfig.USER_ID).toString());
                         //TODO 后续需要添加别的jwt里的项可以在这里添加，目前还有两个可能有用的字段：role, client_id
                     }).build();
 
             exchange.mutate().request(request).build();
             return Mono.just(new AuthorizationDecision(true));
         } catch (Exception e) {
-            log.error("Jwt decode failed in AuthorizationManager.java: "+e.getMessage());
+            log.error("Jwt decode failed in AuthorizationManager.java: " + e.getMessage());
         }
         return Mono.just(new AuthorizationDecision(false));
     }
