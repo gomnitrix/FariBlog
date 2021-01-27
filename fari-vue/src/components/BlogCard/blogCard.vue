@@ -1,5 +1,6 @@
 <template>
   <el-card
+    class="float-card"
     :body-style="{ padding: '0px' }"
     style="padding: '30px 0px 0px 0px'; border-radius: 10px; margin-bottom:50px;width:860px;"
     shadow="hover"
@@ -71,7 +72,7 @@ export default {
 </script>
 
 <style>
-  .el-card:hover{
+  .float-card:hover{
     box-shadow: 1px 10px 30px 0 rgba(0,0,0,.1);
     transition-delay: 0s !important;
     transform: translateY(-5px);

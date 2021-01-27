@@ -6,6 +6,7 @@ import Main from '@/views/main'
 import FariEditor from '@/views/blogEdit'
 import UserMain from '@/views/userMain'
 import BlogPage from '@/views/blogPage'
+import UserInfo from '@/views/userInfoEdit'
 
 Vue.use(Router)
 
@@ -23,7 +24,8 @@ const routes = [
           { path: 'home', name: 'Home', component: Home },
           { path: 'editor', name: 'Editor', component: FariEditor },
           { path: 'blog/:blogId', name: 'Blog', component: BlogPage },
-          { path: 'editor/:blogId', name: 'Updator', component: FariEditor }
+          { path: 'editor/:blogId', name: 'Updator', component: FariEditor },
+          { path: 'info', name: 'About', component: UserInfo }
         ]
       }
     ]

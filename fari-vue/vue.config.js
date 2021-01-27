@@ -10,6 +10,21 @@ module.exports = {
     lintOnSave: false, // eslint-loader 是否在保存的时候检查
     //webpack配置
     chainWebpack: (config) => {
+        config.module
+            .rule('vue')
+            .use('vue-loader')
+            .loader('vue-loader')
+            .tap(options => {
+                options.compilerOptions.directives = {
+                    html(node, directiveMeta) {
+                        (node.props || (node.props = [])).push({
+                            name: 'innerHTML',
+                            value: `xss(_s(${directiveMeta.value}))`
+                        })
+                    }
+                }
+                return options
+            })
     },
     configureWebpack: (config) => {
         if (process.env.NODE_ENV === 'production') {

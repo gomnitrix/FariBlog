@@ -29,6 +29,7 @@
       ref="cropper"
       :dialog-visible="cropperVisible"
       :image="image"
+      :ratio="ratio"
       @finish="onCropFinished"
       @close="closeCropper"
     />
@@ -51,17 +52,25 @@ export default {
     userId: {
       type: String,
       default: ''
+    },
+    imgType: {
+      type: String,
+      default: 'Cover'
+    },
+    ratio: {
+      type: Array,
+      default: () => [1, 0.314]
     }
   },
   data () {
     return {
       uploadUrl: 'https://upload-z2.qiniup.com',
       acceptType: '.jpg,.jpeg,.png,.gif',
-      sizeLimit: 0.5 * 1024 * 1024, // 1Mb
+      sizeLimit: 0.5 * 1024 * 1024, // 500Kb
       postData: {
         key: null,
         token: null,
-        'x:ftype': 'Cover',
+        'x:ftype': this.imgType,
         'x:userid': this.userId,
         'x:blogid': this.blogId
       },
@@ -78,6 +87,9 @@ export default {
     },
     blogId (newValue, oldValue) {
       this.postData['x:blogid'] = newValue
+    },
+    imgType (newValue, oldValue) {
+      this.postData['x:ftype'] = newValue
     }
   },
   mounted () {
@@ -159,7 +171,7 @@ export default {
         this.$message({ type: 'error', message: '上传文件只能是图片格式!' })
       }
       if (!isLt1M) {
-        this.$message({ type: 'error', message: '上传文件大小不能超过1MB!' })
+        this.$message({ type: 'error', message: '上传文件大小不能超过500KB!' })
       }
       return isIMAGE && isLt1M
     },
