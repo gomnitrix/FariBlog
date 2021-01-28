@@ -16,6 +16,28 @@
       <div style="margin-top: 25px; margin-bottom: 30px;">
         <el-row class="editor-row">
           <el-col :span="labelSpan">
+            <label v-html="labels.userName" />
+          </el-col>
+          <el-col
+            :offset="labelSpan"
+            :span="inputSpan"
+          >
+            <el-input
+              v-model="userInfo.userName"
+              class="input-area"
+              :disabled="editFlags.userName"
+            />
+          </el-col>
+          <el-col :span="btnSpan">
+            <i
+              class="el-icon-edit edit-btn"
+              @click="editUserName"
+            />
+          </el-col>
+        </el-row>
+
+        <el-row class="editor-row">
+          <el-col :span="labelSpan">
             <label v-html="labels.summary" />
           </el-col>
           <el-col
@@ -23,17 +45,17 @@
             :span="inputSpan"
           >
             <el-input
+              v-model="userInfo.summary"
               class="input-area"
               type="textarea"
               autosize
               :disabled="editFlags.summary"
-              :placeholder="userInfo.summary"
             />
           </el-col>
           <el-col :span="btnSpan">
             <i
               class="el-icon-edit edit-btn"
-              @click="editFlags.summary = false"
+              @click="editSummary"
             />
           </el-col>
         </el-row>
@@ -48,14 +70,14 @@
           >
             <div style="display:flex;">
               <el-input
+                v-model="userInfo.email.prefix"
                 class="input-area"
                 :disabled="editFlags.email"
-                :placeholder="userInfo.email.prefix"
               />
               <el-autocomplete
+                v-model="userInfo.email.suffix"
                 :disabled="editFlags.email"
                 :fetch-suggestions="querySearch"
-                :placeholder="userInfo.email.suffix"
                 :trigger-on-focus="true"
                 @select="handleSelect"
               >
@@ -68,7 +90,30 @@
           <el-col :span="btnSpan">
             <i
               class="el-icon-edit edit-btn"
-              @click="editFlags.email = false"
+              @click="editEmail"
+            />
+          </el-col>
+        </el-row>
+
+        <el-row class="editor-row">
+          <el-col :span="labelSpan">
+            <label v-html="labels.passWord" />
+          </el-col>
+          <el-col
+            :offset="labelSpan"
+            :span="inputSpan"
+          >
+            <el-input
+              v-model="userInfo.passWord"
+              class="input-area"
+              show-password
+              :disabled="editFlags.passWord"
+            />
+          </el-col>
+          <el-col :span="btnSpan">
+            <i
+              class="el-icon-edit edit-btn"
+              @click="editPassWord"
             />
           </el-col>
         </el-row>
@@ -102,8 +147,10 @@ export default {
         email: true
       },
       labels: {
+        userName: 'UserName:&emsp;&emsp;',
         summary: 'Summary:&emsp;&emsp;',
-        email: 'Email:&emsp;&emsp;'
+        email: 'Email:&emsp;&emsp;',
+        passWord: 'PassWord:&emsp;&emsp;'
       },
       email_suffixs: []
     }
@@ -137,6 +184,22 @@ export default {
         { value: 'outlook.com' },
         { value: '163.com' }
       ]
+    },
+    editSummary () {
+      this.editFlags.summary = false
+      this.userInfo.summary = ''
+    },
+    editEmail () {
+      this.editFlags.email = false
+      this.userInfo.email = ''
+    },
+    editPassWord () {
+      this.editFlags.passWord = false
+      this.userInfo.passWord = ''
+    },
+    editUserName () {
+      this.editFlags.userName = false
+      this.userInfo.userName = ''
     }
   }
 
