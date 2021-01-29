@@ -123,6 +123,7 @@
 </template>
 
 <script>
+import { updateUser } from '@/api/user'
 export default {
   name: 'UserInfo',
   data () {
@@ -200,6 +201,30 @@ export default {
     editUserName () {
       this.editFlags.userName = false
       this.userInfo.userName = ''
+    },
+    update () {
+      var params = this.userInfo
+      params.uid = this.$route.params.userId
+      updateUser(params).then(response => {
+        if (response.success === true) {
+          this.$message({
+            type: 'success',
+            message: response.message
+          })
+          this.$router.push({
+            name: 'Home',
+            params: {
+              user: this.userInfo.userName,
+              userId: params.uid
+            }
+          })
+        } else {
+          this.$message({
+            type: 'error',
+            message: response.message
+          })
+        }
+      })
     }
   }
 
