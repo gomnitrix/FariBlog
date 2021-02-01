@@ -1,14 +1,21 @@
 package com.gomnitrix.commons.service.Impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.gomnitrix.commons.dto.BlogDto;
 import com.gomnitrix.commons.dto.ImageDto;
 import com.gomnitrix.commons.entity.Image;
+import com.gomnitrix.commons.exception.OssOperationFailed;
 import com.gomnitrix.commons.mapper.ImageConvertMapper;
 import com.gomnitrix.commons.mapper.ImageMapper;
 import com.gomnitrix.commons.service.ImageService;
 import com.gomnitrix.commons.service.UuidService;
+import com.qiniu.common.QiniuException;
+import com.qiniu.storage.BucketManager;
+import com.qiniu.storage.Configuration;
+import com.qiniu.storage.Region;
+import com.qiniu.util.Auth;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -29,10 +36,19 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
     @Value("${qiniu.domain}")
     private String domain;
 
+    @Value("${qiniu.bucket}")
+    private String bucket;
+
     ImageConvertMapper converter = ImageConvertMapper.INSTANCE;
 
     @Autowired
     UuidService uuidService;
+
+    @Autowired
+    Auth auth;
+
+    Configuration cfg = new Configuration(Region.region2());
+    BucketManager bucketManager = new BucketManager(auth, cfg);
 
     @Override
     public List<String> getCoverUrlByBlogs(List<BlogDto> blogDtos) {
@@ -80,5 +96,26 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
         Image image = getById(uid);
         String key = image.getImgUrl();
         return "http://" + domain + "/" + key;
+    }
+
+    @Override
+    public void deleteBlogCover(Long blogId) {
+        deleteOssImage(blogId, "blog_uid");
+    }
+
+    @Override
+    public void deleteUserAvatar(Long userId) {
+        deleteOssImage(userId, "user_uid");
+    }
+
+    private void deleteOssImage(Long ownerUid, String column){
+        QueryWrapper<Image> wrapper = new QueryWrapper<>();
+        wrapper.eq(column, ownerUid).eq("status", 0).select("img_url");
+        Image image = getOne(wrapper);
+        try{
+            bucketManager.delete(bucket, image.getImgUrl());
+        }catch (QiniuException ex){
+            throw new OssOperationFailed(ex.getMessage());
+        }
     }
 }

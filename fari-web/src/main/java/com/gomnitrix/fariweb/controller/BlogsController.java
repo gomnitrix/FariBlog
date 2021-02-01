@@ -9,6 +9,7 @@ import com.gomnitrix.commons.service.BlogService;
 import com.gomnitrix.commons.service.ImageService;
 import com.gomnitrix.commons.utils.JsonUtil;
 import com.google.gson.JsonObject;
+import com.qiniu.util.Auth;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
@@ -28,6 +29,9 @@ public class BlogsController {
 
     @Autowired
     ImageService imageService;
+
+    @Autowired
+    Auth auth;
 
     static final String USER_ID = GatewayConstConfig.HEADER_USER_ID;
 
@@ -79,6 +83,7 @@ public class BlogsController {
             throw new PermissionDeniedException("Update operation failed, the blog does not belong to your account.");
         }
         blogService.updateBlog(blogDto);
+        imageService.deleteBlogCover(blogDto.getUid());
         return new SuccessResponse.Builder().build().toJson();
     }
 
@@ -97,6 +102,7 @@ public class BlogsController {
             throw new PermissionDeniedException("Delete operation failed, the blog does not belong to your account.");
         }
         blogService.deleteBlog(blogId);
+        imageService.deleteBlogCover(blogId);
         return new SuccessResponse.Builder().build().toJson();
     }
 }

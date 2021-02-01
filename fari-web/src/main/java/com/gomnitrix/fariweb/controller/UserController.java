@@ -5,6 +5,7 @@ import com.gomnitrix.commons.configuration.GatewayConstConfig;
 import com.gomnitrix.commons.dto.UserDto;
 import com.gomnitrix.commons.exception.InvalidParameterException;
 import com.gomnitrix.commons.exception.PermissionDeniedException;
+import com.gomnitrix.commons.service.ImageService;
 import com.gomnitrix.commons.service.Impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,6 +23,9 @@ import java.util.Objects;
 @RequestMapping("/user")
 public class UserController {
 
+    @Autowired
+    ImageService imageService;
+
     static final String USER_ID = GatewayConstConfig.HEADER_USER_ID;
 
     @Autowired
@@ -37,6 +41,7 @@ public class UserController {
             throw new PermissionDeniedException();
         }
         userService.updateUserInfo(userDto);
+        imageService.deleteUserAvatar(userDto.getUid());
         return new SuccessResponse.Builder().build().toJson();
     }
 }

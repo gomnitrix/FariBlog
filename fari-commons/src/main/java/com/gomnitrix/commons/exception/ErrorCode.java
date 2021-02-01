@@ -17,7 +17,8 @@ public enum ErrorCode {
     PERMISSION_DENIED(4001, HttpStatus.FORBIDDEN, "Insufficient Authority Or Illegal Operation."),
     INTERNAL_ERROR(5001, HttpStatus.INTERNAL_SERVER_ERROR, "Some Internal Errors Happened."),
     RSA_KEY_EXCEPTION(5002, HttpStatus.INTERNAL_SERVER_ERROR, "Some Error Occurs When Use Rsa Key Pairs."),
-    INVALID_PARAMETER(5003, HttpStatus.BAD_REQUEST, "Some Error Occurs While Parsing Parameter.");
+    INVALID_PARAMETER(5003, HttpStatus.BAD_REQUEST, "Some Error Occurs While Parsing Parameter."),
+    OSS_OPERATION_FAILED(5004,HttpStatus.OK, "Some Error Occurred In Oss Service.");
 
 
     private final Integer code;

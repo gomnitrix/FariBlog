@@ -59,6 +59,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         if(userDto.getPassWord()!=null){
             userDto.setPassWord(encoder.encode(userDto.getPassWord()));
         }
+        User user = getById(userDto.getUid());
+        //TODO Avatar delete & Avatar type: String -> Long in User.java
         updateById(converter.fromUserDto(userDto));
     }
 }
